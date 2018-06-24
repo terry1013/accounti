@@ -1,0 +1,9 @@
+2018-06-23 23:20:18 Connecting to database CsvJdbc () with *autoconnection=false
+2018-06-23 23:20:18 Connecting to database Flicka () with *autoconnection=false
+2018-06-23 23:20:18 Looking for parameters in externa file.
+2018-06-23 23:20:18 Connecting to database SleOracle (SLEPLANC) with *autoconnection=true
+2018-06-23 23:20:28 Connecting to database eTeam () with *autoconnection=false
+2018-06-23 23:20:30 Plugin IContable found
+2018-06-23 23:20:30 Plugin IContable.startPlugin() sucsefully
+2018-06-23 23:20:30 Plugin SLEPlanC found
+2018-06-23 23:20:30 Plugin SLEPlanC.startPlugin() sucsefully
