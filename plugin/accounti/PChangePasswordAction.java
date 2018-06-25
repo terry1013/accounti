@@ -1,4 +1,4 @@
-package plugin.icontable;
+package plugin.accounti;
 
 import java.awt.event.*;
 import java.beans.*;

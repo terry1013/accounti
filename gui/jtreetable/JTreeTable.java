@@ -19,8 +19,6 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.tree.*;
 
-import plugin.planc.dashboard.*;
-
 import com.alee.laf.tree.*;
 
 import core.*;

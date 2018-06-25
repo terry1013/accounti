@@ -8,8 +8,6 @@ import org.apache.commons.csv.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 
-import plugin.planc.dashboard.*;
-
 import core.*;
 import core.datasource.*;
 import core.tasks.*;
@@ -102,7 +100,7 @@ public class ExportTask implements TRunnable {
 
 		return styles;
 	}
-	
+
 	private Vector<Record> sort(Vector<Record> rl, String fn) {
 		ArrayList<TEntry> sortl = new ArrayList<TEntry>();
 		for (Record r : rl) {
@@ -123,11 +121,7 @@ public class ExportTask implements TRunnable {
 			request = (ServiceRequest) exportParameters.get(ExportParameters.SERVICE_REQUEST);
 			response = ServiceConnection.sendTransaction(request);
 			rmodel = (Record) response.getParameter(ServiceResponse.RECORD_MODEL);
-			rcdList  = (Vector) response.getData();
-			// sort by av_path for AmountViewerTask
-			if (request.getTableName().equals(AmountViewerTask.class.getName())) {
-				rcdList = sort(rcdList, "av_path");
-			}
+			rcdList = (Vector) response.getData();
 
 			fldtxt = TStringUtils.getFieldsDescriptions(request);
 
@@ -193,13 +187,6 @@ public class ExportTask implements TRunnable {
 		for (Record r : rcdList) {
 			// for AmountViewerTask generated data, export only nodes with patter information.
 			String patter = "";
-			if (request.getTableName().equals(AmountViewerTask.class.getName())) {
-				String node = (String) r.getFieldValue("av_src_file");
-				patter = (String) exportParameters.get(node);
-				if (patter.equals("")) {
-					continue;
-				}
-			}
 			Row row = sheet.createRow(rowcnt++);
 			for (int co = 0; co < fldlist.length; co++) {
 				String fld = fldlist[co];
@@ -244,7 +231,7 @@ public class ExportTask implements TRunnable {
 		workbook.write(fos);
 		fos.close();
 	}
-	
+
 	private void exportCsv() throws Exception {
 		String ff = (String) exportParameters.get(ExportParameters.FILE_FORMAT);
 
@@ -278,13 +265,6 @@ public class ExportTask implements TRunnable {
 		for (Record rcd : rcdList) {
 			// for AmountViewerTask generated data, export only nodes with patter information.
 			String patter = "";
-			if (request.getTableName().equals(AmountViewerTask.class.getName())) {
-				String node = (String) rcd.getFieldValue("av_src_file");
-				patter = (String) exportParameters.get(node);
-				if (patter.equals("")) {
-					continue;
-				}
-			}
 			Object[] csvr = new Object[flds.length];
 			for (int co = 0; co < flds.length; co++) {
 				String fld = flds[co];
@@ -327,6 +307,6 @@ public class ExportTask implements TRunnable {
 
 	@Override
 	public void setTaskParameters(Record r, Object o) {
-		
+
 	}
 }

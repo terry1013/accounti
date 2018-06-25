@@ -11,3 +11,7 @@
 /PayrollList.class
 /SendAccountMovement.class
 /SendAccountsParameter.class
+/ExportTask.class
+/SendMovementTask.class
+/AccountI.class
+/AccountIP.class

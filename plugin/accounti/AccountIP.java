@@ -8,24 +8,27 @@
  * Contributors:
  *     terry - initial API and implementation
  ******************************************************************************/
-package plugin.icontable;
+package plugin.accounti;
 
-import gui.docking.*;
+import java.util.*;
 
-import java.awt.event.*;
-
-import net.infonode.docking.*;
 import action.*;
+import core.*;
 
-public class AccountTransfer extends TAbstractAction {
-
-	public AccountTransfer() {
-		super(NO_SCOPE);
-	}
+/**
+ * plugin entry for mail
+ * 
+ * @author terry
+ * 
+ */
+public class AccountIP extends PluginAdapter {
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		View v = DockingContainer.createDynamicView(CompanyList.class.getName());
-		DockingContainer.setWindow(v, getClass().getName());
+	public Object executePlugin(Object obj) {
+		Vector<TAbstractAction> actl = new Vector<TAbstractAction>();
+		actl.add(new AccountTransfer());
+		actl.add(new AccountingProcess());
+		
+		return actl;
 	}
 }

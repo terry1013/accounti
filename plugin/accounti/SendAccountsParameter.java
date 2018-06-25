@@ -8,7 +8,7 @@
  * Contributors:
  *     terry - initial API and implementation
  ******************************************************************************/
-package plugin.icontable;
+package plugin.accounti;
 
 import gui.*;
 
@@ -59,7 +59,7 @@ public class SendAccountsParameter extends AbstractDataInput implements ItemList
 		CellConstraints cc = new CellConstraints();
 		PanelBuilder build = new PanelBuilder(lay);
 		build.add(getInputComponent("sac.todb"), cc.xy(1, 1));
-		build.add(getInputComponent("sac.tofile"), cc.xy(3, 1));
+		build.add(getInputComponent("sac.tofile"), cc.xy(1, 3));
 		build.add(getLabelFor("sac.filename"), cc.xy(1, 5));
 		build.add(getInputComponent("sac.filename"), cc.xyw(1, 6, 3));
 		build.add(getInputComponent("sac.delat"), cc.xy(1, 8));
@@ -75,7 +75,7 @@ public class SendAccountsParameter extends AbstractDataInput implements ItemList
 		addInputComponent("sac.date", TUIUtils.getWebDateField("ttsac.date", TStringUtils.ZERODATE), false, true);
 		addInputComponent("sac.user", TUIUtils.getJTextField("ttsac.user", "", 20), false, true);
 
-		lay = new FormLayout("left:pref, 3dlu, left:pref, 100dlu", // columns
+		lay = new FormLayout("left:pref, 3dlu, left:pref, 50dlu", // columns
 				"p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p"); // rows
 		cc = new CellConstraints();
 		build = new PanelBuilder(lay);
@@ -104,7 +104,7 @@ public class SendAccountsParameter extends AbstractDataInput implements ItemList
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (toFileRB.isSelected()) {
-			setEnabledInputComponent("ttsac.tofile", toFileRB.isSelected());
+			setEnabledInputComponent("sac.tofile", toFileRB.isSelected());
 		}
 	}
 	@Override

@@ -1,4 +1,4 @@
-package plugin.icontable;
+package plugin.accounti;
 
 import gui.*;
 

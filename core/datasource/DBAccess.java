@@ -16,7 +16,6 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-import plugin.planc.*;
 import core.*;
 
 /**
@@ -508,12 +507,7 @@ public class DBAccess {
 			return;
 		}
 		Long fusid = (Long) Session.getUserFieldValue("id");
-		// 180125: bug18.3 planc bussines logic: see method documentation
-		if (tableName.equals("SLE_PLANC_BU")) {
-			if (SLEPlanC.allowAllBU() == null) {
-				return;
-			}
-		}
+
 		String[] link = slnk.split(";");
 		// String lefttn = link[0];
 		String leftfn = link[1];

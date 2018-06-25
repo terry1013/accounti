@@ -8,7 +8,7 @@
  * Contributors:
  *     terry - initial API and implementation
  ******************************************************************************/
-package plugin.icontable;
+package plugin.accounti;
 
 import gui.docking.*;
 
@@ -25,7 +25,7 @@ public class AccountingProcess extends TAbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		SplitWindow sw = new SplitWindow(false, 0.6f, DockingContainer.createDynamicView(CompanyList.class.getName()),
+		SplitWindow sw = new SplitWindow(true, 0.5f, DockingContainer.createDynamicView(CompanyList.class.getName()),
 				DockingContainer.createDynamicView(PayrollList.class.getName()));
 		DockingContainer.setWindow(sw, getClass().getName());
 	}

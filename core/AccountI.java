@@ -29,7 +29,7 @@ import net.infonode.docking.*;
 import org.jdesktop.core.animation.timing.*;
 import org.jdesktop.swing.animation.timing.sources.*;
 
-import plugin.icontable.*;
+import plugin.accounti.*;
 import action.*;
 
 import com.alee.extended.layout.*;
@@ -217,7 +217,7 @@ public class AccountI {
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
 		}
-		
+
 		if (p == CONSOLE) {
 			frame.setJMenuBar(null);
 			frame.setResizable(false);
@@ -260,8 +260,8 @@ public class AccountI {
 			oldBound = frame.getBounds();
 
 			// frame bound
-			Rectangle sbound = (Rectangle) TPreferences.getPreference(TPreferences.WINDOW_BOUND, AccountI.class.getName(),
-					frame.getSizeBy(0.7));
+			Rectangle sbound = (Rectangle) TPreferences.getPreference(TPreferences.WINDOW_BOUND,
+					AccountI.class.getName(), frame.getSizeBy(0.7));
 
 			// frame state
 			boolean ani = true;
@@ -277,7 +277,7 @@ public class AccountI {
 				frame.setState(JFrame.NORMAL);
 			}
 
-			frame.setResizable(false);
+			frame.setResizable(true);
 			frame.setContent(TUIUtils.getBackgroundPanel());
 
 			// perform animation if frame state allow it
@@ -443,32 +443,27 @@ public class AccountI {
 				// TODO: 180116: is necesary grant plugins more control over jmenubar. !!!!
 				if (obj instanceof Vector) {
 					Vector v = (Vector) obj;
-					// for plancplugin, every action in vector is a main menu
-					if (pic.equals("SLEPlanC")) {
-						for (Object jc : v) {
-							menuBar.add((JComponent) jc);
-						}
-					} else {
-						JMenu jm = new JMenu(PluginManager.getPluginProperty(pic, "plugin.caption"));
-						for (Object aa : v) {
-							jm.add((AbstractAction) aa);
-						}
-						menu.add(jm);
+					JMenu jm = new JMenu(PluginManager.getPluginProperty(pic, "plugin.caption"));
+					for (Object aa : v) {
+						jm.add((AbstractAction) aa);
 					}
+					menuBar.add(jm);
 				}
 			}
 		}
+		/*
 		if (menu.getMenuComponentCount() > 0) {
 			menuBar.add(menu);
 		}
+		*/
 
 		// ---------------------------------------------------------------
 		// Help
 		// ---------------------------------------------------------------
 		menu = new JMenu(TStringUtils.getBundleString("main.menuitem.help"));
 		// g7.add(new Help());
-//		menu.add(new UpdateManifestView());
-//		menu.add(new JSeparator(JSeparator.HORIZONTAL));
+		// menu.add(new UpdateManifestView());
+		// menu.add(new JSeparator(JSeparator.HORIZONTAL));
 		// menu.add(new DockingAction(Wellcome.class));
 		// menu.add(new DockingAction(HelpBrowser.class));
 		// HelpRecorderAction act = new HelpRecorderAction();
@@ -483,6 +478,7 @@ public class AccountI {
 
 		menu.add(new About());
 		menuBar.add(menu);
+		frame.setJMenuBar(menuBar);
 
 		// ---------------------------------------------------------------
 		// user

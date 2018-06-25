@@ -19,7 +19,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import plugin.planc.dashboard.*;
 import action.*;
 
 import com.alee.extended.layout.*;
@@ -119,9 +118,6 @@ public class ExportParameters extends AbstractDataInput {
 		build.add(getGeneralOptionsPanel(), cc.xy(1, 1));
 		build.add(getOutputOptionsPanel(), cc.xy(1, 3));
 		build.add(getFieldsSelectionPanel(), cc.xywh(3, 1, 1, 3));
-		if (supplier instanceof AmountViewer) {
-			build.add(getNodePatternEditorPanel(), cc.xyw(1, 5, 3));
-		}
 		JPanel jp = build.getPanel();
 		return jp;
 	}
@@ -255,7 +251,7 @@ public class ExportParameters extends AbstractDataInput {
 			// custom behavior for .xlsx button: 
 			// - disabled for all except for amoutviewer
 			if (k.equals(".xlsx")) {
-				outFmt[i].setEnabled((supplier instanceof AmountViewer));
+//				outFmt[i].setEnabled((supplier instanceof AmountViewer));
 			}
 		}
 		outFmt[0].setSelected(true);

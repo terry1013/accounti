@@ -27,8 +27,6 @@ import net.infonode.docking.theme.*;
 import net.infonode.docking.util.*;
 import net.infonode.util.*;
 import net.sf.jasperreports.engine.*;
-import plugin.planc.*;
-import plugin.planc.dashboard.*;
 
 import com.alee.extended.panel.*;
 import com.alee.extended.statusbar.*;
@@ -53,22 +51,18 @@ public class DockingContainer extends JPanel {
 	private static boolean addListern;
 	private static ComponentTransition transitionPanel;
 	private static JComponent backgroundPanel;
-	private static AmountViewer amountViewer;
 	private static String actualViewName;
 
 	public DockingContainer() {
 		super(new BorderLayout());
 		properties = new RootWindowProperties();
 		dynamicViews = new HashMap<String, View>();
-		amountViewer = new AmountViewer();
-		amountViewer.init();
 
 		configureRootWindow();
 		loadView(null);
 
 		backgroundPanel = TUIUtils.getBackgroundPanel();
 		transitionPanel = new ComponentTransition();
-		transitionPanel.setContent(amountViewer);
 		transitionPanel.setContent(rootWindow);
 		transitionPanel.setContent(backgroundPanel);
 
@@ -83,10 +77,6 @@ public class DockingContainer extends JPanel {
 		transitionPanel.setTransitionEffect(effect);
 
 		dockingContainer = this;
-	}
-
-	public static AmountViewer getAmountViewer() {
-		return amountViewer;
 	}
 
 	public static JComponent getBackgroundPanel() {
@@ -134,7 +124,6 @@ public class DockingContainer extends JPanel {
 			v = createDynamicView(cn);
 			rootWindow.setVisible(false);
 			DockingUtil.addWindow(v, rootWindow);
-			fireProperty("", TConstants.PATH_SELECTED, PlanCSelector.getActualPath());
 			rootWindow.setVisible(true);
 		} else {
 			v.restoreFocus();
@@ -233,10 +222,6 @@ public class DockingContainer extends JPanel {
 				DockingComponent dc = (DockingComponent) cn.getComponent();
 				dc.propertyChange(new PropertyChangeEvent(src, pn, null, nval));
 			}
-		}
-		// TODO: Temporal: dispach property to amountviewer if property is path selected
-		if (pn.equals(TConstants.PATH_SELECTED)) {
-			amountViewer.propertyChange(new PropertyChangeEvent(src, pn, null, nval));
 		}
 	}
 
@@ -354,7 +339,6 @@ public class DockingContainer extends JPanel {
 		} else {
 			loadView(actualViewName);
 		}
-		fireProperty("", TConstants.PATH_SELECTED, PlanCSelector.getActualPath());
 		rootWindow.setVisible(true);
 	}
 
@@ -498,13 +482,6 @@ public class DockingContainer extends JPanel {
 		bar.add(pd);
 		bar.addSpacing();
 
-		WebToggleButton left = new WebToggleButton(new PlanningAction());
-		left.setSelected(true);
-		WebToggleButton right = new WebToggleButton(new DashBoardAction());
-		WebButtonGroup textGroup = new WebButtonGroup(true, left, right);
-		textGroup.setButtonsDrawFocus(false);
-
-		bar.addToEnd(textGroup);
 		bar.addToEnd(TTaskManager.getProgressBar());
 		return bar;
 	}

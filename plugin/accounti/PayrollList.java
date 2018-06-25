@@ -8,7 +8,7 @@
  * Contributors:
  *     terry - initial API and implementation
  ******************************************************************************/
-package plugin.icontable;
+package plugin.accounti;
 
 import gui.*;
 import gui.docking.*;
@@ -26,7 +26,7 @@ public class PayrollList extends UIListPanel implements DockingComponent {
 
 	public PayrollList() {
 		super(null);
-		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE_PAYROLL_IMPORT", null);
+		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE$USER_PAYROLLS", null);
 		setToolBar(new SendAccountMovement(this));
 		putClientProperty(TConstants.SHOW_COLUMNS, "PAYROLL_ID;PAYROLL_NAME");
 		putClientProperty(TConstants.ICON_PARAMETERS, "-1; ");

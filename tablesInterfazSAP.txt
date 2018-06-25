@@ -1,0 +1,112 @@
+CREATE TABLE nmm027
+(codcia        VARCHAR2(4)      NOT NULL
+,anoctb        NUMBER(4,0)      NOT NULL
+,lapctb        NUMBER(2,0)      NOT NULL
+,tipcmp        VARCHAR2(2)      NOT NULL
+,numcmp        VARCHAR2(36)     NOT NULL
+,feccmp        DATE             NOT NULL
+,ctactb        CHAR(36)         NOT NULL
+,numdoc        VARCHAR2(10)     NOT NULL
+,fecdoc        DATE
+,monctb        NUMBER(17,5)
+,destra        VARCHAR2(30)
+,debcre        VARCHAR2(1)
+,estaid        VARCHAR2(20)
+,userid        VARCHAR2(30)
+,fecsis        DATE
+,canctb        number(17,5)
+)storage (initial 2048 K next 256 K);
+
+COMMENT ON TABLE nmm027
+    IS 'MOVIMIENTO CONTABLE RESUMIDO';
+COMMENT ON COLUMN nmm027.codcia
+    IS 'Compañía Contable';
+COMMENT ON COLUMN nmm027.anoctb
+    IS 'Año contable';
+COMMENT ON COLUMN nmm027.lapctb
+    IS 'Lapso contable';
+COMMENT ON COLUMN nmm027.tipcmp
+    IS 'Tipo de comprobante';
+COMMENT ON COLUMN nmm027.numcmp
+    IS 'Número de Comprobante';
+COMMENT ON COLUMN nmm027.feccmp
+    IS 'Fecha de Comprobante';
+COMMENT ON COLUMN nmm027.ctactb
+    IS 'Cuenta Contable';
+COMMENT ON COLUMN nmm027.numdoc
+    IS 'Número de Documento';
+COMMENT ON COLUMN nmm027.fecdoc
+    IS 'Fecha de Documento';
+COMMENT ON COLUMN nmm027.monctb
+    IS 'Monto de la transacción';
+COMMENT ON COLUMN nmm027.destra
+    IS 'Descripción del movimiento';
+COMMENT ON COLUMN nmm027.debcre
+    IS 'Tipo o clasificación de cuenta (1=Debito, 2=Credito)';
+COMMENT ON COLUMN nmm027.estaid
+    IS 'Estación de trabajo por donde se realizó el proceso';
+COMMENT ON COLUMN nmm027.userid
+    IS 'Usuario que ejecutó el proceso contable';
+COMMENT ON COLUMN nmm027.fecsis
+    IS 'fecha de cuando se generó el movimiento contable';
+COMMENT ON COLUMN nmm027.canctb
+    IS 'Cantidad contable';
+
+CREATE TABLE zifi_regcont
+(mandt varchar(3) not null
+,id numeric(10) not null
+,codcia        VARCHAR2(4)      NOT NULL
+,anoctb        NUMBER(4,0)      NOT NULL
+,lapctb        NUMBER(2,0)      NOT NULL
+,tipcmp        VARCHAR2(2)      NOT NULL
+,numcmp        VARCHAR2(36)     NOT NULL
+,feccmp        DATE             NOT NULL
+,ctactb        CHAR(36)         NOT NULL
+,numdoc        VARCHAR2(10)     NOT NULL
+,fecdoc        DATE
+,monctb        NUMBER(17,5)
+,destra        VARCHAR2(30)
+,debcre        VARCHAR2(1)
+,estaid        VARCHAR2(20)
+,userid        VARCHAR2(30)
+,fecsis        DATE
+,canctb        number(17,5)
+,fecproc varchar(8)
+)storage (initial 2048 K next 256 K);
+
+COMMENT ON TABLE zifi_regcont
+    IS 'MOVIMIENTO CONTABLE -INTERFAZ SAP';
+COMMENT ON COLUMN zifi_regcont.codcia
+    IS 'Compañía Contable';
+COMMENT ON COLUMN zifi_regcont.anoctb
+    IS 'Año contable';
+COMMENT ON COLUMN zifi_regcont.lapctb
+    IS 'Lapso contable';
+COMMENT ON COLUMN zifi_regcont.tipcmp
+    IS 'Tipo de comprobante';
+COMMENT ON COLUMN zifi_regcont.numcmp
+    IS 'Número de Comprobante';
+COMMENT ON COLUMN zifi_regcont.feccmp
+    IS 'Fecha de Comprobante';
+COMMENT ON COLUMN zifi_regcont.ctactb
+    IS 'Cuenta Contable';
+COMMENT ON COLUMN zifi_regcont.numdoc
+    IS 'Número de Documento';
+COMMENT ON COLUMN zifi_regcont.fecdoc
+    IS 'Fecha de Documento';
+COMMENT ON COLUMN zifi_regcont.monctb
+    IS 'Monto de la transacción';
+COMMENT ON COLUMN zifi_regcont.destra
+    IS 'Descripción del movimiento';
+COMMENT ON COLUMN zifi_regcont.debcre
+    IS 'Tipo o clasificación de cuenta (1=Debito, 2=Credito)';
+COMMENT ON COLUMN zifi_regcont.estaid
+    IS 'Estación de trabajo por donde se realizó el proceso';
+COMMENT ON COLUMN zifi_regcont.userid
+    IS 'Usuario que ejecutó el proceso contable';
+COMMENT ON COLUMN zifi_regcont.fecsis
+    IS 'fecha de cuando se generó el movimiento contable';
+COMMENT ON COLUMN zifi_regcont.canctb
+    IS 'Cantidad contable';
+COMMENT ON COLUMN zifi_regcont.fecproc
+    IS 'Fecha de proceso, se llena en SAP al procesar';
