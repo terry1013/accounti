@@ -18,6 +18,7 @@ import java.text.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.*;
 
 import com.alee.extended.date.*;
 import com.jgoodies.forms.builder.*;
@@ -29,7 +30,7 @@ import core.datasource.*;
 /**
  * compose mail dialog
  */
-public class SendAccountsParameter extends AbstractDataInput implements ItemListener {
+public class SendAccountsParameter extends AbstractDataInput {
 
 	private JRadioButton toFileRB;
 	/**
@@ -48,13 +49,16 @@ public class SendAccountsParameter extends AbstractDataInput implements ItemList
 		addInputComponent("sac.todb", jrb, false, true);
 
 		toFileRB = TUIUtils.getJRadioButton("ttsac.tofile", "sac.tofile", false);
-		toFileRB.addItemListener(this);;
+		toFileRB.addChangeListener((ChangeEvent ce) -> {
+			setEnabledInputComponent("sac.filename", toFileRB.isSelected());
+			preValidate(null);
+		});
 		bg.add(toFileRB);
 		addInputComponent("sac.tofile", toFileRB, false, true);
 		addInputComponent("sac.filename", TUIUtils.getWebFileChooserField("ttexport.filename", null), true, false);
 		addInputComponent("sac.delat", TUIUtils.getJCheckBox("sac.delat", false), false, true);
 
-		FormLayout lay = new FormLayout("left:pref, 3dlu, 100dlu", // columns
+		FormLayout lay = new FormLayout("left:pref, 3dlu, 70dlu", // columns
 				"p, 3dlu, p, 3dlu, p, p, 3dlu, p"); // rows
 		CellConstraints cc = new CellConstraints();
 		PanelBuilder build = new PanelBuilder(lay);
@@ -67,28 +71,29 @@ public class SendAccountsParameter extends AbstractDataInput implements ItemList
 		jp_mov.setBorder(new TitledBorder("Movimientos"));
 
 		// vaucher selection
-		WebDateField wdf = TUIUtils.getWebDateField("ttsac.mmyy", TStringUtils.ZERODATE);
-		wdf.setDateFormat(new SimpleDateFormat("MM/yyy"));
-		addInputComponent("sac.mmyy", wdf, false, true);
+		addInputComponent("sac.year", TUIUtils.getJFormattedTextField("ttsac.year", 0, 4), false, true);
+		addInputComponent("sac.month", TUIUtils.getJFormattedTextField("ttsac.month", 0, 2), false, true);
 		addInputComponent("sac.type", TUIUtils.getJTextField("ttsac.type", "", 2), false, true);
 		addInputComponent("sac.number", TUIUtils.getJTextField("ttsac.number", "", 20), false, true);
 		addInputComponent("sac.date", TUIUtils.getWebDateField("ttsac.date", TStringUtils.ZERODATE), false, true);
 		addInputComponent("sac.user", TUIUtils.getJTextField("ttsac.user", "", 20), false, true);
 
-		lay = new FormLayout("left:pref, 3dlu, left:pref, 50dlu", // columns
+		lay = new FormLayout("left:pref, 3dlu, left:pref, 7dlu, left:pref, 3dlu, left:pref", // columns
 				"p, 3dlu, p, 3dlu, p, 3dlu, p, 3dlu, p"); // rows
 		cc = new CellConstraints();
 		build = new PanelBuilder(lay);
-		build.add(getLabelFor("sac.mmyy"), cc.xy(1, 1));
-		build.add(getInputComponent("sac.mmyy"), cc.xy(3, 1));
+		build.add(getLabelFor("sac.year"), cc.xy(1, 1));
+		build.add(getInputComponent("sac.year"), cc.xy(3, 1));
+		build.add(getLabelFor("sac.month"), cc.xy(5, 1));
+		build.add(getInputComponent("sac.month"), cc.xy(7, 1));
 		build.add(getLabelFor("sac.type"), cc.xy(1, 3));
 		build.add(getInputComponent("sac.type"), cc.xy(3, 3));
 		build.add(getLabelFor("sac.number"), cc.xy(1, 5));
-		build.add(getInputComponent("sac.number"), cc.xyw(3, 5, 2));
+		build.add(getInputComponent("sac.number"), cc.xyw(3, 5, 5));
 		build.add(getLabelFor("sac.date"), cc.xy(1, 7));
 		build.add(getInputComponent("sac.date"), cc.xy(3, 7));
 		build.add(getLabelFor("sac.user"), cc.xy(1, 9));
-		build.add(getInputComponent("sac.user"), cc.xyw(3, 9, 2));
+		build.add(getInputComponent("sac.user"), cc.xyw(3, 9, 5));
 		JPanel jp_vau = build.getPanel();
 		jp_vau.setBorder(new TitledBorder("Selección de comprobantes"));
 
@@ -101,12 +106,6 @@ public class SendAccountsParameter extends AbstractDataInput implements ItemList
 		preValidate(null);
 	}
 
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (toFileRB.isSelected()) {
-			setEnabledInputComponent("sac.tofile", toFileRB.isSelected());
-		}
-	}
 	@Override
 	public void validateFields() {
 

@@ -20,7 +20,6 @@ import javax.swing.*;
 
 import action.*;
 import core.*;
-import core.reporting.*;
 import core.tasks.*;
 
 public class SendAccountMovement extends TAbstractAction implements PropertyChangeListener {
@@ -41,9 +40,6 @@ public class SendAccountMovement extends TAbstractAction implements PropertyChan
 		TTaskManager.submitRunnable(et, null);
 		//et.run();
 		dialog.dispose();
-
-		dialog.dispose();
-
 	}
 
 	@Override

@@ -185,8 +185,6 @@ public class ExportTask implements TRunnable {
 
 		// data: diferent procedures according to servicerequest
 		for (Record r : rcdList) {
-			// for AmountViewerTask generated data, export only nodes with patter information.
-			String patter = "";
 			Row row = sheet.createRow(rowcnt++);
 			for (int co = 0; co < fldlist.length; co++) {
 				String fld = fldlist[co];
@@ -197,10 +195,6 @@ public class ExportTask implements TRunnable {
 					cel.setCellStyle(styles.get("Double"));
 					cel.setCellValue((Double) val);
 					continue;
-				}
-				if (fld.equals("av_name")) {
-					Record sr1 = (Record) r.getFieldValue("av_srcrecord");
-					val = TStringUtils.format(patter, sr1);
 				}
 				cel.setCellStyle(styles.get("String"));
 				cel.setCellValue(val.toString());
@@ -270,11 +264,6 @@ public class ExportTask implements TRunnable {
 				String fld = flds[co];
 				Object val = rcd.getFieldValue(fld);
 				val = fixFieldValue(val);
-				// amountViev only
-				if (fld.equals("av_name")) {
-					Record sr1 = (Record) rcd.getFieldValue("av_srcrecord");
-					val = TStringUtils.format(patter, sr1);
-				}
 				csvr[co] = val;
 			}
 			csvf.printRecord(out, csvr);

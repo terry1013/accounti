@@ -661,21 +661,36 @@ public class TStringUtils {
 	}
 
 	/**
-	 * replace the given variables in patt with the corresponding field value content in <code>rcd</code>.
-	 * <p>
-	 * If after the replace, remains variables names, those are marked as <code>_var_name</code>
+	 * replace the given variables inside <code>patt</code> with the corresponding field value content in
+	 * <code>rcd</code>.
 	 * 
-	 * @param patt - name_pattern. variables are all fieldname who star with $ sign
-	 * @param rcd - values to replace
+	 * @param patt - string with standar variables in it
+	 * @param prefix - prefix to complete the variable inside the <code>patt</code> argument
+	 * @param rcd - Record with values for replacement.
 	 * 
-	 * @return Formatted string
+	 * @return
 	 */
-	public static String format(String patt, Record rcd) {
+	public static String format(String patt, String prefix, Hashtable flds) {
+		String upatt = patt.toUpperCase();
+		Vector<String> vars = new Vector<String>();
 		String res = patt;
-		for (int c = 0; c < rcd.getFieldCount(); c++) {
-			res = res.replace("$" + rcd.getFieldName(c), rcd.getFieldValue(c).toString());
+		// extract all variables
+		Vector fnam = new Vector(flds.keySet());
+		for (int c = 0; c < fnam.size(); c++) {
+			String ufld = ("${" + prefix + fnam.elementAt(c) + "}").toUpperCase();
+			int ix = upatt.indexOf(ufld);
+			if (ix > -1) {
+				int le = ufld.length();
+				vars.add(patt.substring(ix, ix + le));
+			}
 		}
-		return res.replaceAll("[$]", "_");
+		// for detected vars, replace values
+		for (String var : vars) {
+			String fld = var.substring(2, var.length() - 1);
+			fld = fld.replace(prefix, "");
+			res = res.replace(var, flds.get(fld).toString());
+		}
+		return res;
 	}
 
 	/**

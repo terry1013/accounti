@@ -616,26 +616,15 @@ public class DBAccess {
 			String pkls[] = null;
 			if (kfcnt == 0) {
 				SystemLog.warning("No key field found for database table " + tableName);
-				if (tableName.equals("SLE_PLANC_ACCOUNT")) {
-					pkls = new String[]{"id"};
+				if (tableName.equals("NMM027")) {
+					pkls = new String[]{"codcia"};
 				}
-				if (tableName.equals("SLE_PLANC_PRESUMPTION")) {
-					pkls = new String[]{"scenario_id", "account_id", "time_slot"};
-				}
-				if (tableName.equals("SLE_PLANC_AMOUNT")) {
-					pkls = new String[]{"scenario_id", "company_id", "bu_id", "account_id", "workrelation_id"};
-				}
-				if (tableName.equals("SLE_SCALE")) {
-					pkls = new String[]{"id"};
-				}
-				if (tableName.equals("SLE_PLANC_GEN_ACCOUNT")) {
-					pkls = new String[]{"scenario_id", "account_id"};
-				}
-				if (tableName.equals("SLE_USER_CALC_TYPES")) {
-					pkls = new String[]{"user_id", "calc_type_id"};
+				if (tableName.equals("ZIFI_REGCONT")) {
+					pkls = new String[]{"codcia"};
 				}
 				
-				if (pkls.length > 0) {
+				
+				if (pkls != null && pkls.length > 0) {
 					SystemLog.warning("Database table " + tableName + " keys fields alter by DBAccess.");
 					for (Field fl : flds) {
 						for (String pk : pkls) {

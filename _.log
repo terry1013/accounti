@@ -1,8 +1,12 @@
-2018-06-24 15:18:28 Connecting to database CsvJdbc () with *autoconnection=false
-2018-06-24 15:18:28 Connecting to database Flicka () with *autoconnection=false
-2018-06-24 15:18:28 Looking for parameters in externa file.
-2018-06-24 15:18:28 Connecting to database SleOracle (SLEPLANC) with *autoconnection=true
-2018-06-24 15:18:37 Connecting to database eTeam () with *autoconnection=false
-2018-06-24 15:18:38 Plugin IContable found
-2018-06-24 15:18:38 Plugin IContable.startPlugin() sucsefully
-2018-06-24 15:18:45 Looking for parameters in externa file.
+2018-06-25 17:19:15 Connecting to database CsvJdbc () with *autoconnection=false
+2018-06-25 17:19:15 Connecting to database Flicka () with *autoconnection=false
+2018-06-25 17:19:15 Looking for parameters in externa file.
+2018-06-25 17:19:15 Connecting to database SleOracle (SLEPLANC) with *autoconnection=true
+2018-06-25 17:19:58 Connecting to database eTeam () with *autoconnection=false
+2018-06-25 17:19:59 Plugin AccountIP found
+2018-06-25 17:19:59 Plugin AccountIP.startPlugin() sucsefully
+2018-06-25 17:20:34 Looking for parameters in externa file.
+2018-06-25 17:23:48 No key field found for database table NMM027
+2018-06-25 17:23:48 Database table NMM027 keys fields alter by DBAccess.
+2018-06-25 17:23:49 No key field found for database table ZIFI_REGCONT
+2018-06-25 17:23:49 Database table ZIFI_REGCONT keys fields alter by DBAccess.
