@@ -16,3 +16,14 @@
 /AccountI.class
 /AccountIP.class
 /SendMovementTask$1.class
+/ProcessAccountingUI.class
+/SendAccountsUI.class
+/SendAccountsMovement.class
+/SendAccountsMovementTask$1.class
+/SendAccountsMovementTask.class
+/ProcessAccountsUI.class
+/ProcessAcounts.class
+/ProcessAccounts.class
+/StoreProcedureCallTask.class
+/ProcessAccountsTask$1.class
+/ProcessAccountsTask.class

@@ -22,22 +22,22 @@ import action.*;
 import core.*;
 import core.tasks.*;
 
-public class SendAccountMovement extends TAbstractAction implements PropertyChangeListener {
+public class ProcessAccounts extends TAbstractAction implements PropertyChangeListener {
 
 	private AbstractDataInput dataInput;
 	private JDialog dialog;
 	private RedirectAction redirectAction;
 
-	public SendAccountMovement(UIListPanel uilp) {
+	public ProcessAccounts(UIListPanel uilp) {
 		super(RECORD_SCOPE);
 		editableList = uilp;
-		messagePrefix = "SendAccountMovement.";
+		messagePrefix = "ProcessAccounts.";
 	}
 	@Override
 	public void actionPerformed2() {
 		Hashtable ht = dataInput.getFields();
-		SendMovementTask et = new SendMovementTask(ht);
-		TTaskManager.submitRunnable(et, null);
+//		ProcessAccountsTask et = new ProcessAccountsTask(ht);
+//		TTaskManager.submitRunnable(et, null);
 		//et.run();
 		dialog.dispose();
 	}

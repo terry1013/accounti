@@ -27,7 +27,7 @@ public class PayrollList extends UIListPanel implements DockingComponent {
 	public PayrollList() {
 		super(null);
 		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE$USER_PAYROLLS", null);
-		setToolBar(new SendAccountMovement(this));
+		setToolBar(new ProcessAccounts(this));
 		putClientProperty(TConstants.SHOW_COLUMNS, "PAYROLL_ID;PAYROLL_NAME");
 		putClientProperty(TConstants.ICON_PARAMETERS, "-1; ");
 	}
@@ -35,8 +35,8 @@ public class PayrollList extends UIListPanel implements DockingComponent {
 	@Override
 	public UIComponentPanel getUIFor(AbstractAction aa) {
 		UIComponentPanel pane = null;
-		if (aa instanceof SendAccountMovement) {
-			pane = new SendAccountsParameter(getRecord());
+		if (aa instanceof ProcessAccounts) {
+			pane = new ProcessAccountsUI(getRecord());
 		}
 		return pane;
 	}

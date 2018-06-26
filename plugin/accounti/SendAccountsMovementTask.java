@@ -4,7 +4,6 @@ import gui.*;
 
 import java.io.*;
 import java.sql.*;
-import java.text.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.*;
@@ -18,19 +17,17 @@ import core.*;
 import core.datasource.*;
 import core.tasks.*;
 
-public class SendMovementTask implements TRunnable {
+public class SendAccountsMovementTask implements TRunnable {
 
 	private Vector<Record> rcdList;
 	private Hashtable<String, Object> exportParameters;
 	private Record sifiRcdModel;
 	private ServiceResponse response;
 	private ServiceRequest request;
-	private SimpleDateFormat dateFormat;
 	private TProgressMonitor monitor;
 
-	public SendMovementTask(Hashtable ht) {
+	public SendAccountsMovementTask(Hashtable ht) {
 		this.exportParameters = ht;
-		dateFormat = new SimpleDateFormat("yyMMdd");
 	}
 
 	private Record translateRecord(Record srcRcd, int id) {
@@ -44,7 +41,7 @@ public class SendMovementTask implements TRunnable {
 		// id
 		tr.setFieldValue(1, id);
 		// process's date
-		tr.setFieldValue("FECPROC", dateFormat.format(new Date()));
+		tr.setFieldValue("FECPROC", "");
 		return tr;
 	}
 
@@ -146,32 +143,31 @@ public class SendMovementTask implements TRunnable {
 	}
 
 	private void sendMail(String cvsf) throws Exception {
-
 		// config email parameters
 		ImageHtmlEmail imageHtmlEmail = new ImageHtmlEmail();
-		imageHtmlEmail.setHostName(PluginManager.getPluginProperty("AccountIP", "mail.config.server"));
-		String val = PluginManager.getPluginProperty("AccountIP", "mail.config.smptport");
+		imageHtmlEmail.setHostName(TStringUtils.getBundleString("mail.config.server"));
+		String val = TStringUtils.getBundleString("mail.config.smptport");
 		imageHtmlEmail.setSmtpPort(Integer.valueOf(val));
-		String us = PluginManager.getPluginProperty("AccountIP", "mail.config.autenticator.user");
-		String pass = PluginManager.getPluginProperty("AccountIP", "mail.config.autenticator.password");
+		String us = TStringUtils.getBundleString("mail.config.autenticator.user");
+		String pass = TStringUtils.getBundleString("mail.config.autenticator.password");
 		imageHtmlEmail.setAuthenticator(new DefaultAuthenticator(us, pass));
-		String ssl = PluginManager.getPluginProperty("AccountIP", "mail.config.ssl");
+		String ssl = TStringUtils.getBundleString("mail.config.ssl");
 		imageHtmlEmail.setSSLOnConnect(ssl.equals("true"));
 
 		// header
-		imageHtmlEmail.setFrom(us, PluginManager.getPluginProperty("AccountIP", "mail.config.user.name"));
-		String too[] = PluginManager.getPluginProperty("AccountIP", "mail.recipient").split(";");
+		imageHtmlEmail.setFrom(us, TStringUtils.getBundleString("mail.config.user.name"));
+		String too[] = TStringUtils.getBundleString("mail.recipient").split(";");
 		for (String to : too) {
 			imageHtmlEmail.addTo(to);
 		}
-		imageHtmlEmail.setSubject(PluginManager.getPluginProperty("AccountIP", "mail.subject"));
+		imageHtmlEmail.setSubject(TStringUtils.getBundleString("mail.subject"));
 
 		// clear zero date
-		if (!((Date)exportParameters.get("sac.date")).equals(TStringUtils.ZERODATE)) {
+		if (((Date) exportParameters.get("sac.date")).equals(TStringUtils.ZERODATE)) {
 			exportParameters.put("sac.date", "");
 		}
 
-		String patt = PluginManager.getPluginProperty("AccountIP", "mail.body");
+		String patt = TStringUtils.getBundleString("mail.body");
 		String newbody = TStringUtils.format(patt, "", exportParameters);
 		imageHtmlEmail.setHtmlMsg(newbody);
 

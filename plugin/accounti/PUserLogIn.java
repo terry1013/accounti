@@ -289,6 +289,8 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 			rs = new String[pn.length];
 			for (int i = 0; i < pn.length; i++) {
 				String pv = dsop.getProperty(pn[i]);
+				// load into main property list
+				TStringUtils.constants.put(pv, dsop.get(pv).toString());
 				if (pv == null) {
 					throw new Exception("Parameter " + pn[i] + " not found.");
 				}

@@ -13,33 +13,22 @@ package plugin.accounti;
 import gui.*;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.text.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
-import com.alee.extended.date.*;
 import com.jgoodies.forms.builder.*;
 import com.jgoodies.forms.layout.*;
 
 import core.*;
 import core.datasource.*;
 
-/**
- * compose mail dialog
- */
-public class SendAccountsParameter extends AbstractDataInput {
+public class SendAccountsUI extends AbstractDataInput {
 
 	private JRadioButton toFileRB;
-	/**
-	 * new instance
-	 * 
-	 * @param rcd - record
-	 * @param newr - new or not
-	 */
-	public SendAccountsParameter(Record rcd) {
+
+	public SendAccountsUI(Record rcd) {
 		super(null);
 
 		// movement

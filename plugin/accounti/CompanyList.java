@@ -27,7 +27,7 @@ public class CompanyList extends UIListPanel implements DockingComponent {
 	public CompanyList() {
 		super(null);
 		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE_COMPANY", null);
-		setToolBar(new SendAccountMovement(this));
+		setToolBar(new SendAccountsMovement(this));
 		putClientProperty(TConstants.SHOW_COLUMNS, "id;name");
 		putClientProperty(TConstants.ICON_PARAMETERS, "-1; ");
 	}
@@ -35,8 +35,8 @@ public class CompanyList extends UIListPanel implements DockingComponent {
 	@Override
 	public UIComponentPanel getUIFor(AbstractAction aa) {
 		UIComponentPanel pane = null;
-		if (aa instanceof SendAccountMovement) {
-			pane = new SendAccountsParameter(getRecord());
+		if (aa instanceof SendAccountsMovement) {
+			pane = new SendAccountsUI(getRecord());
 		}
 		return pane;
 	}
