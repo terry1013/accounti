@@ -16,13 +16,11 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-
 
 import action.*;
 import core.*;
@@ -166,10 +164,9 @@ public class HelpPlayer extends JLayeredPane implements HideLeft, ListSelectionL
 			jep.setEditable(false);
 			jep.setOpaque(false);
 
-			File f = TResourceUtils.getFile("help/help.properties");
 			Properties prp = new Properties();
 			try {
-				prp.load(new FileInputStream(f));
+				prp.load(TResourceUtils.getFile("help/help.properties"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

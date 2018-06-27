@@ -521,9 +521,8 @@ public class HTMLEditor extends JPanel implements ActionListener {
 	 */
 	public static void setStyleSheet(HTMLEditorKit ek, String ccs) {
 		try {
-			FileInputStream fis = new FileInputStream(TResourceUtils.getFile(ccs));
 			StyleSheet css = new StyleSheet();
-			css.loadRules(new InputStreamReader(fis), null);
+			css.loadRules(new InputStreamReader(TResourceUtils.getFile(ccs)), null);
 			ek.setStyleSheet(css);
 		} catch (Exception ex) {
 			SystemLog.logException(ex);

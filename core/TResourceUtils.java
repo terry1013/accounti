@@ -16,7 +16,9 @@ import java.net.*;
 import java.util.*;
 import java.util.jar.*;
 import java.util.zip.*;
+
 import javax.swing.*;
+
 import core.datasource.*;
 
 /**
@@ -30,40 +32,8 @@ public class TResourceUtils {
 	private static Vector<File> Files = new Vector();
 	private static String iconPath = USER_DIR + "/resources/images/";
 	private static String iconPath_impl = USER_DIR + "/resources/images/impl/";
+	private static ClassLoader classLoader = TResourceUtils.class.getClassLoader();
 
-	/**
-	 * crea y retorna un archivo .zip con el arrego de archivos pasados como argumento.
-	 * 
-	 * @param fls - archivo a empaquetar
-	 * @return archivo empaquetado
-	 */
-	public static File createZipFile(File[] fls) {
-		File jarf = null;
-		try {
-			boolean atleastone = false;
-			jarf = File.createTempFile("tmp", ".zip");
-			FileOutputStream fos = new FileOutputStream(jarf);
-			JarOutputStream jos = new JarOutputStream(fos);
-			for (File f : fls) {
-				if (f.exists() && f.isFile()) {
-					BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-					jos.putNextEntry(new ZipEntry(f.getName()));
-					byte[] b = new byte[(int) f.length()];
-					for (int x = 0; x < b.length; x++) {
-						b[x] = (byte) bis.read();
-					}
-					jos.write(b);
-					atleastone = true;
-				}
-			}
-			if (atleastone) {
-				jos.close();
-			}
-		} catch (Exception e) {
-			SystemLog.logException(e);
-		}
-		return jarf;
-	}
 
 	/**
 	 * TODO: metodo viejo
@@ -134,11 +104,15 @@ public class TResourceUtils {
 	 * @param fn - nombre del archivo (con extencion)
 	 * @return archivo
 	 */
-	public static File getFile(String fn) {
+	public static InputStream getFile(String fn) {
+		String fullfn = fn.startsWith("/") ? fn : "resources/"+fn;
+		return classLoader.getResourceAsStream(fullfn);
+		/*
 		File f = null;
 		String path = fn.startsWith("/") ? USER_DIR : RESOURCE_PATH;
 		f = new File(path + fn);
 		return f;
+		*/
 	}
 
 	/**
@@ -168,34 +142,30 @@ public class TResourceUtils {
 		if (in == null) {
 			return null;
 		}
-		String path = in.startsWith("/") ? USER_DIR : iconPath;
+		String fullfn = in.startsWith("/") ? in : "resources/images/"+in;
 
 		// intenta png
-		String fna = path + in + ".png";
-		File f = new File(fna);
-		if (f.exists()) {
-			return new ImageIcon(fna);
+		URL url = getURL(fullfn+".png");
+		if (url != null) {
+			return new ImageIcon(url);
 		}
 		// intenta gif
-		fna = path + in + ".gif";
-		f = new File(fna);
-		if (f.exists()) {
-			return new ImageIcon(fna);
+		url = getURL(fullfn+".gif");
+		if (url != null) {
+			return new ImageIcon(url);
 		}
 		// impl
 		// -----------------------
-		path = in.startsWith("/") ? USER_DIR + in : iconPath_impl;
+		fullfn = in.startsWith("/") ? in : "resources/images/impl/"+in;
 		// intenta png
-		fna = iconPath_impl + in + ".png";
-		f = new File(fna);
-		if (f.exists()) {
-			return new ImageIcon(fna);
+		url = getURL(fullfn+".png");
+		if (url != null) {
+			return new ImageIcon(url);
 		}
 		// intenta gif
-		fna = iconPath_impl + in + ".gif";
-		f = new File(fna);
-		if (f.exists()) {
-			return new ImageIcon(fna);
+		url = getURL(fullfn+".gif");
+		if (url != null) {
+			return new ImageIcon(url);
 		}
 		return null;
 	}
@@ -244,6 +214,8 @@ public class TResourceUtils {
 	 * @return URL
 	 */
 	public static URL getURL(String qn) {
+		return classLoader.getResource(qn);
+		/*
 		URL u = null;
 		try {
 			File f = getFile(qn);
@@ -256,6 +228,7 @@ public class TResourceUtils {
 
 		}
 		return u;
+		*/
 	}
 
 	/**
@@ -268,63 +241,7 @@ public class TResourceUtils {
 	 *         SystemLog.logException(e); } return doc; }
 	 */
 
-	/**
-	 * metodo encargado de verificar e instalar posibles ptf. toda entrada exepto "producer" sera considerada como
-	 * archivo de ptf
-	 * 
-	 * Si este metodo detecta ptf disponibles: - se localiza el archivo manifest.txt y se presenta su contenido - se
-	 * instalan los ptf durante la instalacion - se finaliza la aplicacion.
-	 * 
-	 * @param qjn - nombre calificado del archivo .jar.
-	 * @throws IOException
-	 */
-	public static void installPTF(ResourceBundle man) {
-		try {
-			// direccion del archivo
-			String jf = TStringUtils.getBundleString("ptf_dir") + man.getString("ptf_jar");
-
-			// descargar en temporal
-			// TODO: barra de progreso
-			URL c_ptf = new URL(jf);
-			BufferedInputStream bis = new BufferedInputStream(c_ptf.openStream());
-			byte[] data = new byte[bis.available()];
-			bis.read(data);
-			File f = new File(System.getProperty("java.io.tmpdir") + "ptf.jar");
-			f.createNewFile();
-			FileOutputStream fos = new FileOutputStream(f);
-			fos.write(data);
-			fos.close();
-
-			JarFile jarf = new JarFile(f);
-			Enumeration e = jarf.entries();
-			boolean fl = false;
-			while (e.hasMoreElements()) {
-				ZipEntry ze = (ZipEntry) e.nextElement();
-				String zefn = ze.getName();
-				// instalacion
-				InputStream is = jarf.getInputStream(ze);
-				byte[] b = new byte[(int) ze.getSize()];
-				for (int x = 0; x < b.length; x++) {
-					b[x] = (byte) is.read();
-				}
-				String sfn = System.getProperty("user.dir") + "/" + zefn;
-				File fn = new File(sfn);
-				if (fn.exists()) {
-					fn.delete();
-				}
-				// crea nuevo por error cuando existe y se borra
-				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(sfn)));
-				bos.write(b);
-				bos.close();
-				is.close();
-			}
-			if (fl) {
-				// TODO: restart
-			}
-		} catch (Exception e) {
-			SystemLog.logException(e);
-		}
-	}
+	
 
 	/**
 	 * retorna el nombre de la clase del objeto pasado como argumento
@@ -365,27 +282,6 @@ public class TResourceUtils {
 		return v.toArray(new String[v.size()]);
 	}
 
-	/**
-	 * este metodo localiza contruye y retorna el archivo pasado como argumento el cual debe contener el nombre del
-	 * manifiesto para un ptf
-	 * 
-	 * @param man - id de resource bundle para nombre
-	 * @return manifiesto o null si no existe ptf disponible
-	 */
-	public static ResourceBundle lookUpPTFManifes(String mn) {
-		ResourceBundle ptfbundle = null;
-		try {
-			URL c_ptf = new URL(TStringUtils.getBundleString("ptf_dir") + TStringUtils.getBundleString(mn));
-			BufferedInputStream bis = new BufferedInputStream(c_ptf.openStream());
-			ptfbundle = new PropertyResourceBundle(bis);
-
-			// TODO: verificar si ptf debe ser cargado
-
-		} catch (Exception e) {
-			SystemLog.logException(e);
-		}
-		return ptfbundle;
-	}
 
 	/**
 	 * envia el mensaje <code>txt</code>de correo electronico con el archivo adjunto pasado como argumento a la

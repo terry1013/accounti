@@ -21,8 +21,8 @@ public abstract class PluginAdapter implements Plugin {
 			// execute db script
 			Connection conn = ConnectionManager.getDBConnection("");
 			ScriptRunner sr = new ScriptRunner(conn, false);
-			FileReader fr = new FileReader(new File(myProperties.get("pluginPath") + "script.sql"));
-			sr.runScript(fr);
+//			FileReader fr = new FileReader(new File(myProperties.get("pluginPath") + "script.sql"));
+//			sr.runScript(fr);
 
 			// set the plugininstalled flag
 			TPreferences.setPreference(TPreferences.PLUGIN_INSTALL_INFO, getClass().getName(), true);

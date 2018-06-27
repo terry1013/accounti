@@ -282,15 +282,15 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 		SystemLog.info("Looking for parameters in externa file.");
 		try {
 			Properties cfgp = new Properties();
-			cfgp.load(new FileInputStream(TResourceUtils.getFile("config.properties")));
+			cfgp.load(TResourceUtils.getFile("config.properties"));
 			String dsf = cfgp.getProperty("datasourceFile");
 			Properties dsop = new Properties();
 			dsop.load(new FileInputStream(new File(dsf)));
+			// load into main property list
+			TStringUtils.loadProperties(dsop);
 			rs = new String[pn.length];
 			for (int i = 0; i < pn.length; i++) {
 				String pv = dsop.getProperty(pn[i]);
-				// load into main property list
-				TStringUtils.constants.put(pv, dsop.get(pv).toString());
 				if (pv == null) {
 					throw new Exception("Parameter " + pn[i] + " not found.");
 				}

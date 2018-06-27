@@ -10,7 +10,6 @@
  ******************************************************************************/
 package core;
 
-import java.io.*;
 import java.util.*;
 
 
@@ -25,34 +24,18 @@ public class PluginManager {
 			installProperties = new Hashtable<String, Properties>();
 			installPlugin = new Hashtable<String, Plugin>();
 
-			FileInputStream fis;
-			String pip = TResourceUtils.USER_DIR + "/plugin/";
 			// lookup for all plugin properties files
-			Vector<File> plugprp = TResourceUtils.findFiles(new File(pip), ".properties");
-			for (File file : plugprp) {
 				Properties prps = new Properties();
-				fis = new FileInputStream(file);
-				prps.load(fis);
+				prps.load(PluginManager.class.getClassLoader().getResourceAsStream("plugin/accounti/_.properties"));
 				// clear property keys and values form white space
 				//TODO: create new property object to convert form string to java object
 				
 //				Properties prps = new Properties()
 				
 				String pic = prps.getProperty("plugin.class");
-				// check if plugin is active by property file
-				String pa = prps.getProperty("plugin.active");
-				if (pa == null || pa.equals("false")) {
-					SystemLog.warning("Plugin " + pic + " not installed because property plugin.active = false");
-					continue;
-				}
-				// try install plugin
 				try {
 					if (pic != null) {
-						String p = file.getPath();
-						String p1 = p.substring(pip.length(), p.lastIndexOf("\\"));
-						// insert pluginPath property
-						prps.put("pluginPath", pip + p1 + "/");
-						String cn = "plugin." + p1 + "." + pic;
+						String cn = "plugin.accounti.AccountIP";
 						Object o = Class.forName(cn).newInstance();
 						if (o instanceof Plugin) {
 							SystemLog.info("Plugin " + pic + " found");
@@ -79,7 +62,6 @@ public class PluginManager {
 					SystemLog.logException(e);
 					SystemLog.severe("Plugin not instaled");
 				}
-			}
 		} catch (Exception e) {
 			SystemLog.logException1(e);
 		}

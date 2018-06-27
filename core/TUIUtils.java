@@ -487,7 +487,7 @@ public class TUIUtils {
 		jep.setEditable(false);
 		StyleSheet shee = new StyleSheet();
 		try {
-			shee.loadRules(new FileReader(TResourceUtils.getFile("HtmlEditor.css")), null);
+//			shee.loadRules(new FileReader(TResourceUtils.getFile("HtmlEditor.css")), null);
 		} catch (Exception e) {
 
 		}

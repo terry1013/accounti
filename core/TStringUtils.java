@@ -10,7 +10,6 @@
  ******************************************************************************/
 package core;
 
-import java.io.*;
 import java.math.*;
 import java.security.*;
 import java.text.*;
@@ -33,6 +32,7 @@ public class TStringUtils {
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat();
 	private static Random random = new Random();
 	private static NumberFormat formatter;
+	private static ClassLoader classLoader = TStringUtils.class.getClassLoader();
 
 	/**
 	 * init enviorement
@@ -41,17 +41,20 @@ public class TStringUtils {
 	 */
 	public static void init() throws Exception {
 		constants = new TreeMap();
-		Vector<File> files = TResourceUtils.findFiles(new File(TResourceUtils.RESOURCE_PATH), ".properties");
-		for (File f : files) {
-			Properties p = new Properties();
-			p.load(new FileInputStream(f));
-			Enumeration kls = p.keys();
-			while (kls.hasMoreElements()) {
-				String k = (String) kls.nextElement();
-				constants.put(k, p.get(k).toString());
-			}
-		}
+		Properties p = new Properties();
+		p.load(classLoader.getResourceAsStream("resources/config.properties"));
+		p.load(classLoader.getResourceAsStream("resources/constants.properties"));
+		p.load(classLoader.getResourceAsStream("resources/database.properties"));
+		loadProperties(p);
 		formatter = getDecimalFormat();
+	}
+	
+	public static void loadProperties(Properties p) {
+		Enumeration kls = p.keys();
+		while (kls.hasMoreElements()) {
+			String k = (String) kls.nextElement();
+			constants.put(k, p.get(k).toString());
+		}		
 	}
 
 	/**

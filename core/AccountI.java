@@ -130,10 +130,11 @@ public class AccountI {
 			}
 			RUNNING_MODE = TPreferences.getProperty("runningMode", RM_NORMAL);
 
-			newMsg = Applet.newAudioClip(TResourceUtils.getURL("newMsg.wav"));
+			newMsg = Applet.newAudioClip(TResourceUtils.getURL("resources/newMsg.wav"));
 
 		} catch (Exception e) {
 			SystemLog.logException1(e, true);
+			System.exit(-1);
 		}
 
 		// pass icon from metal to web look and feel
@@ -145,8 +146,8 @@ public class AccountI {
 		// JFileChooser fc = new JFileChooser();
 
 		WebLookAndFeel.install();
-		WebLookAndFeel.setDecorateFrames(true);
-		WebLookAndFeel.setDecorateDialogs(true);
+//		WebLookAndFeel.setDecorateFrames(true);
+//		WebLookAndFeel.setDecorateDialogs(true);
 
 		UIManager.put("OptionPane.errorIcon", i1);
 		UIManager.put("OptionPane.informationIcon", i2);

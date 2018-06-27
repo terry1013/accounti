@@ -57,7 +57,8 @@ public class ImportFromFile extends UIListPanel implements PropertyChangeListene
 		addPropertyChangeListener(this);
 
 		String fldl = "<ol>";
-		File f = TResourceUtils.getFile(columnModelDef + ".csv");
+//		File f = TResourceUtils.getFile(columnModelDef + ".csv");
+		File f = new File("");
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String lin = br.readLine();
@@ -165,8 +166,8 @@ public class ImportFromFile extends UIListPanel implements PropertyChangeListene
 		// column definition
 		Iterable<CSVRecord> coldefl = null;
 		try {
-			Reader in = new FileReader(TResourceUtils.getFile(columnModelDef + ".csv"));
-			coldefl = (new CSVParser(in, CSVFormat.EXCEL.withHeader()).getRecords());
+//			Reader in = new FileReader(TResourceUtils.getFile(columnModelDef + ".csv"));
+//			coldefl = (new CSVParser(in, CSVFormat.EXCEL.withHeader()).getRecords());
 		} catch (Exception e) {
 			SystemLog.logException(e);
 		}
