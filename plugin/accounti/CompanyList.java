@@ -27,7 +27,7 @@ public class CompanyList extends UIListPanel implements DockingComponent {
 	public CompanyList() {
 		super(null);
 		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE_COMPANY", null);
-		setToolBar(new SendAccountsMovement(this));
+		setToolBar(false,new SendAccountsMovement(this));
 		putClientProperty(TConstants.SHOW_COLUMNS, "id;name");
 		putClientProperty(TConstants.ICON_PARAMETERS, "-1; ");
 	}

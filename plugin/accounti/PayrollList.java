@@ -27,7 +27,7 @@ public class PayrollList extends UIListPanel implements DockingComponent {
 	public PayrollList() {
 		super(null);
 		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE$USER_PAYROLLS", null);
-		setToolBar(new ProcessAccounts(this));
+		setToolBar(false,new ProcessAccounts(this));
 		putClientProperty(TConstants.SHOW_COLUMNS, "PAYROLL_ID;PAYROLL_NAME");
 		putClientProperty(TConstants.ICON_PARAMETERS, "-1; ");
 	}

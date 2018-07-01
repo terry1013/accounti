@@ -52,14 +52,7 @@ public class Session {
 	 * @return whether data security are active
 	 */
 	public static boolean isDataSecurityActive() {
-		if (preliminaryCheck(false)) {
-			// return false to simulate data autorization are off if precheck are true
-			return false;
-		}
-		Record r = ConnectionManager.getAccessTo("sle_security_templates").exist(
-				"id = " + user.getFieldValue("template_id"));
-		int om = (Integer) r.getFieldValue("check_payroll");
-		return om == 0 ? true : false;
+		return false;
 	}
 
 	/**

@@ -6,8 +6,6 @@ import java.beans.*;
 import java.io.*;
 import java.util.*;
 
-import javax.naming.*;
-import javax.naming.ldap.*;
 import javax.swing.*;
 
 import action.*;
@@ -27,9 +25,7 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 
 	private JCheckBox jcb_rem_usr;
 	private JTextField jtf_user_id;
-	private Record usrmod, passPolicy;
-	private DBAccess dbAccess;
-	private int t_usmax_attemps;
+	private Record usrmod;
 
 	/**
 	 * nueva instancia
@@ -40,11 +36,7 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 	public PUserLogIn() {
 		super("security.title04", null, false);
 
-		// retrive default password policy
-		this.passPolicy = ConnectionManager.getAccessTo("sle_password_policy").exist("ID=0");
-		this.t_usmax_attemps = -1;
-		this.dbAccess = ConnectionManager.getAccessTo("sle_users");
-		this.usrmod = dbAccess.getModel();
+		usrmod = new Record("", new Field[]{new Field("USERNAME", "", 20), new Field("PASSWORD", "", 20)});
 		setModel(usrmod);
 		addPropertyChangeListener(TConstants.ACTION_PERFORMED, this);
 		this.jtf_user_id = TUIUtils.getJTextField("ttusername", (String) usrmod.getFieldValue("username"), 20);
@@ -97,8 +89,6 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 			String autMet = SystemVariables.getStringVar("autenticationMethod");
 			Record r2 = null;
 			r2 = autMet.equals("autenticationOracleDB") ? autenticationOracleDB(usr, pass) : null;
-			r2 = autMet.equals("autenticationLDAP") ? autenticationLDAP(usr, pass) : r2;
-			r2 = autMet.equals("autenticationApp") ? autenticationApp(usr, pass) : r2;
 			if (r2 != null) {
 				Session.setUser(r2);
 			}
@@ -106,54 +96,6 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 		if (evt.getNewValue() instanceof CancelAction) {
 			Exit.shutdown();
 		}
-	}
-
-	/**
-	 * this method check user and password against LDAP provider. if database connection ok,
-	 * <code>autenticationApp</code> method is called to check all internal aplication conditions.
-	 * 
-	 * @param usr - user
-	 * @param pass - password
-	 * 
-	 * @return user record or <code>null</code> if any connection error
-	 * @see #autenticationApp(String, String)
-	 * 
-	 */
-	private Record autenticationLDAP(String usr, String pass) {
-		// LdapContext ctx = null;
-		String purl = SystemVariables.getStringVar("ldap_provider_url");
-
-		String secp = SystemVariables.getStringVar("ldap_security_principals");
-		secp = secp.replace("<user>", usr);
-		// secp = secp.replace("<password>", pass);
-
-		Record r2 = null;
-		try {
-			Hashtable env = new Hashtable();
-			env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-			env.put(Context.SECURITY_AUTHENTICATION, "simple");
-			// env.put(Context.SECURITY_PRINCIPAL, "cn=read-only-admin,dc=example,dc=com");
-			env.put(Context.SECURITY_PRINCIPAL, secp);
-			env.put(Context.SECURITY_CREDENTIALS, pass);
-			env.put(Context.PROVIDER_URL, purl);
-			// TODO: extract data form context to update app user file
-			// InitialLdapContext ctx = new InitialLdapContext(env, null);
-			new InitialLdapContext(env, null);
-
-			r2 = dbAccess.exist("username = '" + usr + "'");
-			// LDAP pass but user not in internal tables
-			if (r2 == null) {
-				showAplicationException(new AplicationException("security.msg12"));
-				return null;
-			}
-			r2 = checkUserParameters(r2);
-		} catch (Exception ex) {
-			// ex.printStackTrace();
-			showAplicationException(new AplicationException("security.msg04", ex.getClass().getSimpleName() + ": "
-					+ ex.getMessage()));
-		}
-		return r2;
-
 	}
 
 	/**
@@ -178,94 +120,13 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 			java.sql.Connection con = java.sql.DriverManager.getConnection((String) cf.getFieldValue("t_cnurl"), usr,
 					pass);
 			con.close();
-
-			// 171221: oracle autentication dont need aditional parameters verification
-			r2 = dbAccess.exist("username = '" + usr + "'");
-			// 180405: if user dont exist show error
-			if (r2 == null) {
-				showAplicationExceptionMsg("security.msg09");
-				return null;
-			} else {
-				r2 = checkUserParameters(r2);
-			}
+			r2 = new Record(usrmod);
+			r2.setFieldValue("USERNAME", usr);
+			r2.setFieldValue("PASSWORD", pass);
 		} catch (Exception e) {
 			showAplicationException(new AplicationException("security.msg04", e.getMessage()));
 		}
 		return r2;
-	}
-
-	/**
-	 * Check aditional parameters that must be checked in order to sucsefully login into the system.
-	 * 
-	 * @param r2 - the user trying login
-	 * 
-	 * @return <code>Record</code> if user can login or <code>null</code> otherwise.
-	 */
-	private Record checkUserParameters(Record r2) {
-
-		// verify inactivity field
-		long curd = System.currentTimeMillis();
-		long usrd = ((Date) r2.getFieldValue("inactive_since")).getTime();
-		if (usrd > 0 && (curd > usrd)) {
-			showAplicationExceptionMsg("security.msg08");
-			return null;
-		}
-		return r2;
-	}
-
-	/**
-	 * this method check user and password against internal application file. if all conditions are ok, return the user
-	 * record found in the application user file.
-	 * 
-	 * @param usr - user
-	 * @param pass - password
-	 * 
-	 * @return user record or <code>null</code> if any connection error
-	 * 
-	 */
-	private Record autenticationApp(String usr, String pass) {
-		Record r2 = dbAccess.exist("username = '" + usr + "'");
-		if (r2 != null) {
-			// check num_logins
-			if (t_usmax_attemps < 0) {
-				t_usmax_attemps = (Integer) passPolicy.getFieldValue("MAX_ATTEMPS");
-			}
-
-			// check user inactive date
-			if (checkUserParameters(r2) == null) {
-				return null;
-			}
-
-			String op = (String) r2.getFieldValue("password");
-			String np = TStringUtils.getDigestString(pass);
-
-			// if stored pass if 6 char long, is a otp and change msg.
-			if (op.length() == 6) {
-				if (!(pass.equals(op) && TStringUtils.verifyOneTimePassword(usr, op))) {
-					showAplicationExceptionMsg("security.msg03");
-				}
-			} else {
-				if (!op.equals(np)) {
-					showAplicationExceptionMsg("security.msg10");
-				}
-			}
-
-			if (isShowingError()) {
-				t_usmax_attemps--;
-				// Si se alcanza numero maximo de intentos, se desabilita el usuario
-				if (t_usmax_attemps == 0) {
-					r2.setFieldValue("INACTIVE_SINCE", new Date());
-					dbAccess.update(r2);
-					showAplicationExceptionMsg("security.msg11");
-				}
-				return null;
-			}
-			// all check
-			return r2;
-		} else {
-			showAplicationExceptionMsg("security.msg09");
-			return null;
-		}
 	}
 
 	/**
