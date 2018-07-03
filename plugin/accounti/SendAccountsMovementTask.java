@@ -32,6 +32,9 @@ public class SendAccountsMovementTask implements TRunnable {
 
 	private Record translateRecord(Record srcRcd, int id) {
 		Record tr = new Record(sifiRcdModel);
+		if (srcRcd.getFieldValue("canctb").equals(0)) {
+			System.out.println();
+		}
 		for (int c = 0; c < srcRcd.getFieldCount(); c++) {
 			// rest of fields
 			tr.setFieldValue(c + 2, srcRcd.getFieldValue(c));

@@ -214,7 +214,7 @@ public class DBAccess {
 				Object o = rcd.getDBFieldValue(fn);
 				setObjectInStatement(psta, o, j);
 			}
-			// System.out.println(psta.toString());
+//			System.out.println(psta.toString());
 			psta.executeUpdate();
 			psta.close();
 

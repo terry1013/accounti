@@ -460,11 +460,11 @@ public class Record implements java.io.Serializable {
 		Object o = getFieldValue(c);
 		if (o instanceof Date) {
 			Date d = (Date) o;
-			o = (d.equals(TStringUtils.ZERODATE) && kon) ? "" : d;
+			o = (d.equals(TStringUtils.ZERODATE) && kon) ? null : d;
 		}
 		if (o instanceof Number) {
 			Number n = (Number) o;
-			o = (n.intValue() == 0 && kon) ? "" : n;
+			o = (n.intValue() == 0 && kon) ? "0" : n;
 		}
 		return o;
 	}
