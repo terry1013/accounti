@@ -144,9 +144,16 @@ public class PUserLogIn extends AbstractRecordDataInput implements PropertyChang
 		try {
 			Properties cfgp = new Properties();
 			cfgp.load(TResourceUtils.getFile("config.properties"));
-			String dsf = cfgp.getProperty("datasourceFile");
 			Properties dsop = new Properties();
+			
+			// source dbatabase (include mail properties)
+			String dsf = cfgp.getProperty("sourceFolder") + cfgp.getProperty("datasourceFile");
 			dsop.load(new FileInputStream(new File(dsf)));
+			
+			// target dbatabase 
+			dsf = cfgp.getProperty("targetFolder") + cfgp.getProperty("targetDatasourceFile");
+			dsop.load(new FileInputStream(new File(dsf)));
+
 			// load into main property list
 			TStringUtils.loadProperties(dsop);
 			rs = new String[pn.length];

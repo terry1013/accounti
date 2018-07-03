@@ -543,19 +543,27 @@ public class AccountI {
 			Properties prps = new Properties();
 			for (int i = 0; i < v.size(); i++) {
 				Record r = (Record) v.elementAt(i);
-				// for planc: save the conection user as master user
+				// source database (mark as SleOracle)
 				if (r.getFieldValue("t_cnname").equals("SleOracle")) {
 					Session.setMasterUser((String) r.getFieldValue("t_cnuser"));
-					// 1823: override fields value from table values to values stored in jdbc.properties file
 					String[] rp = PUserLogIn.getJdbcProperties("jdbc.username", "jdbc.password", "jdbc.url");
 					r.setFieldValue("T_CNUSER", rp[0]);
 					r.setFieldValue("T_CNPASSWORD", rp[1]);
 					r.setFieldValue("T_CNURL", rp[2]);
 				}
+				// target database (mark as TargetDB)
+				if (r.getFieldValue("t_cnname").equals("TargetDB")) {
+					Session.setMasterUser((String) r.getFieldValue("t_cnuser"));
+					String[] rp = PUserLogIn.getJdbcProperties("target.jdbc.username", "target.jdbc.password", "target.jdbc.url");
+					r.setFieldValue("T_CNUSER", rp[0]);
+					r.setFieldValue("T_CNPASSWORD", rp[1]);
+					r.setFieldValue("T_CNURL", rp[2]);
+				}
+
 				String pl = (String) r.getFieldValue("T_CNEXTENDED_PRP");
 				prps.clear();
 				TStringUtils.parseProperties(pl, prps);
-				String sc = " (" + prps.getProperty("*schema", "") + ")";
+				String sc = " (" + prps.getProperty("schema", "") + ")";
 				String msg = "Connecting to database " + r.getFieldValue("t_cnname") + sc;
 				String ac = prps.getProperty("*autoconnection", "");
 				SystemLog.info(msg + " with *autoconnection=" + ac);

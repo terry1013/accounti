@@ -49,7 +49,7 @@ public class ConnectionManager {
 		Class.forName(dbDriver).newInstance();
 		if (systemDBC == null || (systemDBC != null && systemDBC.isClosed())) {
 			systemDBC = DriverManager.getConnection(dbUrl);
-			configureConn("", systemDBC, new Properties());
+			configureConn(systemDBC, new Properties());
 		}
 	}
 
@@ -69,7 +69,7 @@ public class ConnectionManager {
 				(String) cf.getFieldValue("t_cnuser"), (String) cf.getFieldValue("t_cnpassword"));
 		Properties prps = new Properties();
 		TStringUtils.parseProperties((String) cf.getFieldValue("t_cnextended_prp"), prps);
-		configureConn((String) cf.getFieldValue("t_cnname") + ".", con, prps);
+		configureConn(con, prps);
 	}
 
 	/**
@@ -103,30 +103,46 @@ public class ConnectionManager {
 	}
 
 	/**
+	 * Compare the table name argumento against the list of tables. return <code>true</code> iff the table name are not
+	 * in the list. the list element may contanin regular expretions. if the <code>tblsf</code> is empty, allow all
+	 * 
+	 * @param tn - the table name
+	 * @param tblsf - list of not allowed table names
+	 * 
+	 * @return <code>true</code> if the tn are allowed
+	 */
+	public static boolean allowTable(String tn, String[] tblsf) {
+		for (String ft : tblsf) {
+			if (tn.matches(ft)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Actualiza relaciones tabla -> coneccion, y metadata
 	 * 
-	 * 
-	 * @param px - prefijo de conexion. las tablas de sistema no tienen prefijo de conexion (el punto viene incluido)
 	 * @param con - conexion
 	 * @param sch - esquema name or n
 	 */
-	private static void configureConn(String px, Connection con, Properties prps) {
+	private static void configureConn(Connection con, Properties prps) {
 		try {
-			String sch = prps.getProperty("*schema", null);
+			String sch = prps.getProperty("schema", null);
+			String ft = prps.getProperty("filterTable", null);
+			String conn = prps.getProperty("connectionName", "");
+			String[] tblsf = ft == null ? new String[0] : ft.split(";");
 			DatabaseMetaData meta = con.getMetaData();
 			ResultSet res = meta.getTables(null, sch, null, new String[]{"TABLE", "VIEW"});
 			while (res.next()) {
 				String tn = res.getString("TABLE_NAME").toUpperCase();
-				dbMetaData.put(tn, meta);
-				dbProperties.put(tn, prps);
-				dbTableConnection.put(tn, con);
-
-				if (!px.equals("")) {
-					dbConnection.put(px.toUpperCase().substring(0, px.length() - 1), con);
-				} else {
-					dbConnection.put("", con);
+				if (allowTable(tn, tblsf)) {
+					dbMetaData.put(tn, meta);
+					dbProperties.put(tn, prps);
+					dbTableConnection.put(tn, con);
+					dbConnection.put(conn, con);
+//					findFK(tn, meta, sch);
 				}
-				findFK(tn, meta, sch);
 			}
 			/*
 			 * ResultSet res1 = meta.getProcedures(null, sch, "%"); while (res1.next()) { String pn =

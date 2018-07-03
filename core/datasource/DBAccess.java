@@ -598,11 +598,11 @@ public class DBAccess {
 				flds[i - 1] = new Field(cn, val1, leng, pres, false, inu, clsn);
 			}
 			// set the primary keys for this record
-			ResultSet rs = dbmetaData.getPrimaryKeys(null, myProperties.getProperty("*schema", null), tableName);
+			ResultSet rs = dbmetaData.getPrimaryKeys(null, myProperties.getProperty("schema", null), tableName);
 			int kfcnt = 0;
 			while (rs.next()) {
 				String fn = rs.getString("COLUMN_NAME").toLowerCase();
-				// System.out.println(tableName + ": " + fn + " >>" + myProperties.getProperty("*schema", null));
+				// System.out.println(tableName + ": " + fn + " >>" + myProperties.getProperty("schema", null));
 				for (Field fl : flds) {
 					if (fl.name.equals(fn)) {
 						fl.iskey = true;

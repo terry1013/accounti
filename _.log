@@ -1,5 +1,19 @@
-2018-07-01 09:51:28 Looking for parameters in externa file.
-2018-07-01 09:51:28 Connecting to database SleOracle (SLEPLANC) with *autoconnection=true
-2018-07-01 09:51:30 Plugin AccountIP found
-2018-07-01 09:51:30 Plugin AccountIP.startPlugin() sucsefully
-2018-07-01 09:51:34 Looking for parameters in externa file.
+2018-07-03 14:04:55 Looking for parameters in externa file.
+2018-07-03 14:04:55 Connecting to database SleOracle (SLEPLANC) with *autoconnection=
+2018-07-03 14:05:03 Looking for parameters in externa file.
+2018-07-03 14:05:03 Connecting to database TargetDB () with *autoconnection=
+2018-07-03 14:05:03 Access denied for user 'sleplanc'@'localhost' (using password: YES)
+java.sql.SQLException: Access denied for user 'sleplanc'@'localhost' (using password: YES)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2847)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:750)
+	at com.mysql.jdbc.MysqlIO.secureAuth411(MysqlIO.java:3558)
+	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1151)
+	at com.mysql.jdbc.Connection.createNewIO(Connection.java:1768)
+	at com.mysql.jdbc.Connection.<init>(Connection.java:430)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:268)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at core.datasource.ConnectionManager.connect(ConnectionManager.java:68)
+	at core.AccountI.initEnviorement(AccountI.java:572)
+	at core.AccountI.main(AccountI.java:170)
+
