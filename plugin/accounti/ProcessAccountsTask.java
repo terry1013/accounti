@@ -5,7 +5,9 @@ import gui.*;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
+
 import javax.swing.*;
+
 import core.*;
 import core.datasource.*;
 import core.tasks.*;
@@ -19,6 +21,8 @@ public class ProcessAccountsTask implements TRunnable {
 	private String ivaluecat = "null";
 	private String iaccountid = "null";
 	private TProgressMonitor monitor;
+
+	public static Vector<String> selectedElements = new Vector<String>();
 
 	public ProcessAccountsTask(Hashtable<String, Object> flds) {
 		Object val = flds.get("storeprocedure.pscenario");

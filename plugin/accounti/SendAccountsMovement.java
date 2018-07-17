@@ -27,15 +27,18 @@ public class SendAccountsMovement extends TAbstractAction implements PropertyCha
 	private AbstractDataInput dataInput;
 	private JDialog dialog;
 	private RedirectAction redirectAction;
+	private CompanyList list;
 
-	public SendAccountsMovement(UIListPanel uilp) {
+	public SendAccountsMovement(CompanyList l) {
 		super(RECORD_SCOPE);
-		editableList = uilp;
+		this.list = l;
 		messagePrefix = "SendAccountMovement.";
 	}
 	@Override
 	public void actionPerformed2() {
 		Hashtable ht = dataInput.getFields();
+		// selected companys
+		ht.put("Companys", list.getSelected());
 		SendAccountsMovementTask et = new SendAccountsMovementTask(ht);
 		TTaskManager.submitRunnable(et, null);
 		//et.run();
@@ -44,12 +47,10 @@ public class SendAccountsMovement extends TAbstractAction implements PropertyCha
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		dataInput = (AbstractDataInput) editableList.getUIFor(this);
-		if (dataInput != null) {
+		dataInput = new SendAccountsUI();
 			dataInput.addPropertyChangeListener(TConstants.ACTION_PERFORMED, this);
 			dialog = getDialog(dataInput, messagePrefix + "title");
 			dialog.setVisible(true);
-		}
 	}
 
 	@Override

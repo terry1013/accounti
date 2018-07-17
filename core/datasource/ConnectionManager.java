@@ -69,6 +69,7 @@ public class ConnectionManager {
 				(String) cf.getFieldValue("t_cnuser"), (String) cf.getFieldValue("t_cnpassword"));
 		Properties prps = new Properties();
 		TStringUtils.parseProperties((String) cf.getFieldValue("t_cnextended_prp"), prps);
+		prps.put("filterTable", (String) cf.getFieldValue("t_cntable_filter"));
 		configureConn(con, prps);
 	}
 
@@ -133,7 +134,13 @@ public class ConnectionManager {
 			String conn = prps.getProperty("connectionName", "");
 			String[] tblsf = ft == null ? new String[0] : ft.split(";");
 			DatabaseMetaData meta = con.getMetaData();
-			ResultSet res = meta.getTables(null, sch, null, new String[]{"TABLE", "VIEW"});
+			ResultSet res = null;
+			String catName = con.getCatalog();
+			if (catName == null) {
+				res = meta.getTables(null, sch, null, new String[]{"TABLE", "VIEW"});
+			} else {
+				res = meta.getTables(null, sch, "ZIFI_REGCONT", new String[]{"TABLE", "VIEW"});
+			}
 			while (res.next()) {
 				String tn = res.getString("TABLE_NAME").toUpperCase();
 				if (allowTable(tn, tblsf)) {
@@ -141,7 +148,7 @@ public class ConnectionManager {
 					dbProperties.put(tn, prps);
 					dbTableConnection.put(tn, con);
 					dbConnection.put(conn, con);
-//					findFK(tn, meta, sch);
+					// findFK(tn, meta, sch);
 				}
 			}
 			/*
@@ -269,7 +276,7 @@ public class ConnectionManager {
 		try {
 			// Statement sta = ((Connection) dbTableConnection.get("T_LOCAL_PROPERTIES")).createStatement();
 			Statement sta = getDBConnection("").createStatement();
-			sta.executeUpdate("SHUTDOWN");
+//			sta.executeUpdate("SHUTDOWN");
 			systemDBC.close();
 			systemDBC = null;
 			dbMetaData.clear();

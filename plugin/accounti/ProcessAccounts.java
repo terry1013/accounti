@@ -20,36 +20,35 @@ import javax.swing.*;
 
 import action.*;
 import core.*;
-import core.tasks.*;
 
 public class ProcessAccounts extends TAbstractAction implements PropertyChangeListener {
 
 	private AbstractDataInput dataInput;
 	private JDialog dialog;
 	private RedirectAction redirectAction;
+	private PayrollList list;
 
-	public ProcessAccounts(UIListPanel uilp) {
+	public ProcessAccounts(PayrollList pl) {
 		super(RECORD_SCOPE);
-		editableList = uilp;
+		this.list = pl;
 		messagePrefix = "ProcessAccounts.";
 	}
 	@Override
 	public void actionPerformed2() {
 		Hashtable ht = dataInput.getFields();
-//		ProcessAccountsTask et = new ProcessAccountsTask(ht);
-//		TTaskManager.submitRunnable(et, null);
-		//et.run();
+		ht.put("Payrolls", list.getSelected());
+		// ProcessAccountsTask et = new ProcessAccountsTask(ht);
+		// TTaskManager.submitRunnable(et, null);
+		// et.run();
 		dialog.dispose();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		dataInput = (AbstractDataInput) editableList.getUIFor(this);
-		if (dataInput != null) {
-			dataInput.addPropertyChangeListener(TConstants.ACTION_PERFORMED, this);
-			dialog = getDialog(dataInput, messagePrefix + "title");
-			dialog.setVisible(true);
-		}
+		dataInput = new ProcessAccountsUI();
+		dataInput.addPropertyChangeListener(TConstants.ACTION_PERFORMED, this);
+		dialog = getDialog(dataInput, messagePrefix + "title");
+		dialog.setVisible(true);
 	}
 
 	@Override

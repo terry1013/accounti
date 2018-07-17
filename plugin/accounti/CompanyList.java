@@ -13,42 +13,67 @@ package plugin.accounti;
 import gui.*;
 import gui.docking.*;
 
+import java.awt.event.*;
 import java.beans.*;
+import java.util.*;
 
 import javax.swing.*;
+
+import com.alee.extended.list.*;
 
 import core.*;
 import core.datasource.*;
 
-public class CompanyList extends UIListPanel implements DockingComponent {
+public class CompanyList extends AbstractDataInput implements DockingComponent {
 
-	private ServiceRequest request;
-
+	private WebCheckBoxList boxList;
+	private SendAccountsMovement action;
+	private CheckBoxListModel model;
 	public CompanyList() {
 		super(null);
-		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE_COMPANY", null);
-		setToolBar(false,new SendAccountsMovement(this));
-		putClientProperty(TConstants.SHOW_COLUMNS, "id;name");
-		putClientProperty(TConstants.ICON_PARAMETERS, "-1; ");
+		setVisibleMessagePanel(false);
 	}
 
-	@Override
-	public UIComponentPanel getUIFor(AbstractAction aa) {
-		UIComponentPanel pane = null;
-		if (aa instanceof SendAccountsMovement) {
-			pane = new SendAccountsUI(getRecord());
-		}
-		return pane;
-	}
-
-	@Override
-	public void init() {
-		setServiceRequest(request);
-		// setView(LIST_VIEW_MOSAIC);
+	public String getSelected() {
+		return null;
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+
+	}
+
+	@Override
+	public void init() {
+		Vector<Record> rlist = ConnectionManager.getAccessTo("SLE$USER_COMPANY").search(
+				"username = '" + Session.getUserName() + "'", null);
+		model = new CheckBoxListModel();
+		for (Record rcd : rlist) {
+			model.addCheckBoxElement(rcd.getFieldValue("COMPANY_ID") + ": " + rcd.getFieldValue("COMPANY_NAME"));
+		}
+		this.boxList = new WebCheckBoxList(model);
+		addWithoutBorder(new JScrollPane(boxList));
+		action = new SendAccountsMovement(this);
+		setToolBar(false, action);
+		boxList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				model = boxList.getCheckBoxListModel();
+				action.setEnabled(!model.getCheckedValues().isEmpty());
+			}
+		});
+
+		boxList.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				firePropertyChange("companySelected", null, model.get(boxList.getSelectedIndex()));
+			}
+		});
+		addPropertyChangeListener("companySelected",
+				(PropertyChangeListener) DockingContainer.getView(PayrollList.class.getName()).getComponent());
+	}
+
+	@Override
+	public void validateFields() {
 
 	}
 }

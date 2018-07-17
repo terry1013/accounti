@@ -22,13 +22,12 @@ import com.jgoodies.forms.builder.*;
 import com.jgoodies.forms.layout.*;
 
 import core.*;
-import core.datasource.*;
 
 public class SendAccountsUI extends AbstractDataInput {
 
 	private JRadioButton toFileRB;
 
-	public SendAccountsUI(Record rcd) {
+	public SendAccountsUI() {
 		super(null);
 
 		// movement

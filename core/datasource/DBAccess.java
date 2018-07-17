@@ -92,6 +92,10 @@ public class DBAccess {
 			if (DB_NAME.equals("Oracle")) {
 				LIMIT = " WHERE ROWNUM = 1";
 			}
+			// OS/400
+			if (DB_NAME.equals("DB2 UDB for AS/400")) {
+	               LIMIT = " FETCH FIRST 1 ROWS ONLY";
+	       }
 			resultSet = sta.executeQuery("SELECT * FROM " + tableName + LIMIT);
 			resultSet.next();
 			this.model = getRecord(resultSet, false);

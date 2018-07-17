@@ -21,11 +21,10 @@ import com.jgoodies.forms.builder.*;
 import com.jgoodies.forms.layout.*;
 
 import core.*;
-import core.datasource.*;
 
 public class ProcessAccountsUI extends AbstractDataInput {
 
-	public ProcessAccountsUI(Record rcd) {
+	public ProcessAccountsUI() {
 		super(null);
 
 		//Selection

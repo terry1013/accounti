@@ -28,11 +28,9 @@ import net.infonode.docking.util.*;
 import net.infonode.util.*;
 import net.sf.jasperreports.engine.*;
 
-import com.alee.extended.panel.*;
 import com.alee.extended.statusbar.*;
 import com.alee.extended.transition.*;
 import com.alee.extended.transition.effects.curtain.*;
-import com.alee.laf.button.*;
 import com.alee.laf.label.*;
 
 import core.*;
@@ -79,6 +77,9 @@ public class DockingContainer extends JPanel {
 		dockingContainer = this;
 	}
 
+	public static View getView(String cls) {
+		return dynamicViews.get(cls);
+	}
 	public static JComponent getBackgroundPanel() {
 		return backgroundPanel;
 	}

@@ -13,42 +13,83 @@ package plugin.accounti;
 import gui.*;
 import gui.docking.*;
 
+import java.awt.event.*;
 import java.beans.*;
+import java.util.*;
 
 import javax.swing.*;
 
-import core.*;
+import net.infonode.docking.*;
+
+import com.alee.extended.list.*;
+
 import core.datasource.*;
 
-public class PayrollList extends UIListPanel implements DockingComponent {
+public class PayrollList extends AbstractDataInput implements DockingComponent {
 
-	private ServiceRequest request;
+	private WebCheckBoxList boxList;
+	private ProcessAccounts action;
+	private CheckBoxListModel model;
 
 	public PayrollList() {
 		super(null);
-		this.request = new ServiceRequest(ServiceRequest.DB_QUERY, "SLE$USER_PAYROLLS", null);
-		setToolBar(false,new ProcessAccounts(this));
-		putClientProperty(TConstants.SHOW_COLUMNS, "PAYROLL_ID;PAYROLL_NAME");
-		putClientProperty(TConstants.ICON_PARAMETERS, "-1; ");
+		setVisibleMessagePanel(false);
+		this.boxList = new WebCheckBoxList();
+		addWithoutBorder(new JScrollPane(boxList));
+		action = new ProcessAccounts(this);
+		setToolBar(false, action);
+		boxList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				model = boxList.getCheckBoxListModel();
+				action.setEnabled(!model.getCheckedValues().isEmpty());
+			}
+		});
 	}
 
-	@Override
-	public UIComponentPanel getUIFor(AbstractAction aa) {
-		UIComponentPanel pane = null;
-		if (aa instanceof ProcessAccounts) {
-			pane = new ProcessAccountsUI(getRecord());
+	public String getSelected() {
+		List<Object> sel = model.getCheckedValues();
+		String ssel = "";
+		for (Object obj : sel) {
+			ssel += obj.toString().split("[:]")[0];
 		}
-		return pane;
-	}
-
-	@Override
-	public void init() {
-		setServiceRequest(request);
-		// setView(LIST_VIEW_MOSAIC);
+		return ssel;
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		Object src = evt.getSource();
+		Object nval = evt.getNewValue();
+		if (src instanceof CompanyList) {
+			CheckBoxCellData cd = (CheckBoxCellData) nval;
+			buildModel(cd.getUserObject().toString().split(":")[0]);
+		}
+	}
+
+	private void buildModel(String cid) {
+		Vector<Record> rlist = ConnectionManager.getAccessTo("SLE$USER_PAYROLLS").search("COMPANY_ID ='" + cid + "'",
+				null);
+		model = new CheckBoxListModel();
+		for (Record rcd : rlist) {
+			model.addCheckBoxElement(rcd.getFieldValue("PAYROLL_ID") + ": " + rcd.getFieldValue("PAYROLL_NAME"));
+		}
+		boxList.setModel(model);
+		setMessage(null);
+	}
+	@Override
+	public void init() {
+		setMessage("ic.ui.msg01");
+
+		/*
+		 * boxList.addListSelectionListener(e -> { model = boxList.getCheckBoxListModel();
+		 * action.setEnabled(!model.getCheckedValues().isEmpty());
+		 * 
+		 * });
+		 */
+	}
+
+	@Override
+	public void validateFields() {
 
 	}
 }

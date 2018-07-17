@@ -1,49 +1,7 @@
-2018-07-03 15:29:50 Looking for parameters in externa file.
-2018-07-03 15:29:50 Connecting to database SleOracle (SLEPLANC) with *autoconnection=
-2018-07-03 15:29:51 Looking for parameters in externa file.
-2018-07-03 15:29:51 Connecting to database TargetDB () with *autoconnection=
-2018-07-03 15:29:51 Plugin AccountIP found
-2018-07-03 15:29:51 Plugin AccountIP.startPlugin() sucsefully
-2018-07-03 15:29:55 Looking for parameters in externa file.
-2018-07-03 15:30:02 No key field found for database table NMM027
-2018-07-03 15:30:02 Database table NMM027 keys fields alter by DBAccess.
-2018-07-03 15:30:02 No key field found for database table ZIFI_REGCONT
-2018-07-03 15:30:02 Database table ZIFI_REGCONT keys fields alter by DBAccess.
-2018-07-03 15:32:38 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SHUTDOWN' at line 1
-java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SHUTDOWN' at line 1
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2847)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1531)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1622)
-	at com.mysql.jdbc.Connection.execSQL(Connection.java:2370)
-	at com.mysql.jdbc.Connection.execSQL(Connection.java:2297)
-	at com.mysql.jdbc.Statement.executeUpdate(Statement.java:1289)
-	at core.datasource.ConnectionManager.shutdown(ConnectionManager.java:272)
-	at action.Exit.shutdown1(Exit.java:75)
-	at action.Exit.shutdown(Exit.java:41)
-	at core.AccountI$1.windowClosing(AccountI.java:165)
-	at java.awt.Window.processWindowEvent(Unknown Source)
-	at javax.swing.JFrame.processWindowEvent(Unknown Source)
-	at java.awt.Window.processEvent(Unknown Source)
-	at java.awt.Component.dispatchEventImpl(Unknown Source)
-	at java.awt.Container.dispatchEventImpl(Unknown Source)
-	at java.awt.Window.dispatchEventImpl(Unknown Source)
-	at java.awt.Component.dispatchEvent(Unknown Source)
-	at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
-	at java.awt.EventQueue.access$500(Unknown Source)
-	at java.awt.EventQueue$3.run(Unknown Source)
-	at java.awt.EventQueue$3.run(Unknown Source)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
-	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
-	at java.awt.EventQueue$4.run(Unknown Source)
-	at java.awt.EventQueue$4.run(Unknown Source)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(Unknown Source)
-	at java.awt.EventQueue.dispatchEvent(Unknown Source)
-	at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
-	at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
-	at java.awt.EventDispatchThread.run(Unknown Source)
-
+2018-07-17 00:14:19 Looking for parameters in externa file.
+2018-07-17 00:14:19 Connecting to database SleOracle (SLEPLANC) with *autoconnection=
+2018-07-17 00:14:19 Looking for parameters in externa file.
+2018-07-17 00:14:19 Connecting to database TargetDB () with *autoconnection=
+2018-07-17 00:14:20 Plugin AccountIP found
+2018-07-17 00:14:20 Plugin AccountIP.startPlugin() sucsefully
+2018-07-17 00:14:24 Looking for parameters in externa file.

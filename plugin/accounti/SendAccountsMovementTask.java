@@ -4,6 +4,7 @@ import gui.*;
 
 import java.io.*;
 import java.sql.*;
+import java.text.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.*;
@@ -25,6 +26,9 @@ public class SendAccountsMovementTask implements TRunnable {
 	private ServiceResponse response;
 	private ServiceRequest request;
 	private TProgressMonitor monitor;
+	private SimpleDateFormat simpleDF = new SimpleDateFormat("yyyyMMdd");
+	
+	public static Vector<String> selectedElements = new Vector<String>();
 
 	public SendAccountsMovementTask(Hashtable ht) {
 		this.exportParameters = ht;
@@ -43,7 +47,14 @@ public class SendAccountsMovementTask implements TRunnable {
 		tr.setFieldValue(0, "400");
 		// id
 		tr.setFieldValue(1, id);
-		// process's date
+		
+		// dates to string
+		Date tmp = (Date) srcRcd.getFieldValue("FECCMP");
+		tr.setFieldValue("FECCMP", tmp.equals(TStringUtils.ZERODATE) ? "" : simpleDF.format( tmp));
+		tmp = (Date) srcRcd.getFieldValue("FECDOC");
+        tr.setFieldValue("FECDOC", tmp.equals(TStringUtils.ZERODATE) ? "" : simpleDF.format( tmp));
+		tmp = (Date) srcRcd.getFieldValue("FECSIS");
+        tr.setFieldValue("FECSIS", tmp.equals(TStringUtils.ZERODATE) ? "" : simpleDF.format( tmp));
 		tr.setFieldValue("FECPROC", "");
 		return tr;
 	}
