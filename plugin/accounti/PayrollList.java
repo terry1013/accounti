@@ -19,17 +19,17 @@ import java.util.*;
 
 import javax.swing.*;
 
-import net.infonode.docking.*;
-
 import com.alee.extended.list.*;
 
 import core.datasource.*;
 
 public class PayrollList extends AbstractDataInput implements DockingComponent {
 
+	private static Vector<String> selectedElements = new Vector<String>();
 	private WebCheckBoxList boxList;
 	private ProcessAccounts action;
 	private CheckBoxListModel model;
+	private String company;
 
 	public PayrollList() {
 		super(null);
@@ -42,40 +42,32 @@ public class PayrollList extends AbstractDataInput implements DockingComponent {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				model = boxList.getCheckBoxListModel();
-				action.setEnabled(!model.getCheckedValues().isEmpty());
+				List list = model.getElements();
+				// payroll to process
+				for (int i = 0; i < list.size(); i++) {
+					CheckBoxCellData cd = (CheckBoxCellData) model.elementAt(i);
+					String pid = cd.getUserObject().toString().split("[:]")[0];
+					selectedElements.remove(company + pid);
+					if (model.isCheckBoxSelected(i)) {
+						selectedElements.add(company + pid);
+					} 
+				}
+				// enable actions if any payroll is selected for any company
+				action.setEnabled(!selectedElements.isEmpty());
 			}
 		});
 	}
 
 	public String getSelected() {
-		List<Object> sel = model.getCheckedValues();
 		String ssel = "";
-		for (Object obj : sel) {
-			ssel += obj.toString().split("[:]")[0];
+		for (Object obj : selectedElements) {
+			String c_p = obj.toString();
+			ssel += c_p.substring(0, 2) + "  " + c_p.substring(4, 6) + "  ";
 		}
-		return ssel;
+		// return ssel.substring(0, ssel.length()-2);
+		return ssel.substring(0, ssel.length());
 	}
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		Object src = evt.getSource();
-		Object nval = evt.getNewValue();
-		if (src instanceof CompanyList) {
-			CheckBoxCellData cd = (CheckBoxCellData) nval;
-			buildModel(cd.getUserObject().toString().split(":")[0]);
-		}
-	}
-
-	private void buildModel(String cid) {
-		Vector<Record> rlist = ConnectionManager.getAccessTo("SLE$USER_PAYROLLS").search("COMPANY_ID ='" + cid + "'",
-				null);
-		model = new CheckBoxListModel();
-		for (Record rcd : rlist) {
-			model.addCheckBoxElement(rcd.getFieldValue("PAYROLL_ID") + ": " + rcd.getFieldValue("PAYROLL_NAME"));
-		}
-		boxList.setModel(model);
-		setMessage(null);
-	}
 	@Override
 	public void init() {
 		setMessage("ic.ui.msg01");
@@ -89,7 +81,31 @@ public class PayrollList extends AbstractDataInput implements DockingComponent {
 	}
 
 	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		Object src = evt.getSource();
+		Object nval = evt.getNewValue();
+		if (src instanceof CompanyList) {
+			CheckBoxCellData cd = (CheckBoxCellData) nval;
+			this.company = cd.getUserObject().toString().split(":")[0];
+			buildModel();
+		}
+	}
+
+	@Override
 	public void validateFields() {
 
+	}
+
+	private void buildModel() {
+		Vector<Record> rlist = ConnectionManager.getAccessTo("SLE$USER_PAYROLLS").search(
+				"COMPANY_ID ='" + company + "'", null);
+		model = new CheckBoxListModel();
+		for (Record rcd : rlist) {
+			String pid = (String) rcd.getFieldValue("PAYROLL_ID");
+			boolean sel = selectedElements.contains(company + pid);
+			model.addCheckBoxElement(pid + ": " + rcd.getFieldValue("PAYROLL_NAME"), sel);
+		}
+		boxList.setModel(model);
+		setMessage(null);
 	}
 }

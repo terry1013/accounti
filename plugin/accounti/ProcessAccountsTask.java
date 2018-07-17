@@ -22,8 +22,6 @@ public class ProcessAccountsTask implements TRunnable {
 	private String iaccountid = "null";
 	private TProgressMonitor monitor;
 
-	public static Vector<String> selectedElements = new Vector<String>();
-
 	public ProcessAccountsTask(Hashtable<String, Object> flds) {
 		Object val = flds.get("storeprocedure.pscenario");
 		val = flds.get("storeprocedure.irelation");

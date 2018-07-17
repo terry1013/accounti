@@ -29,18 +29,24 @@ public class CompanyList extends AbstractDataInput implements DockingComponent {
 	private WebCheckBoxList boxList;
 	private SendAccountsMovement action;
 	private CheckBoxListModel model;
+
 	public CompanyList() {
 		super(null);
 		setVisibleMessagePanel(false);
 	}
 
-	public String getSelected() {
-		return null;
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 
+	}
+
+	public String getSelected() {
+		String ssel = "";
+		List list = model.getCheckedValues();
+		for (Object obj : list) {
+			ssel += obj.toString().split("[:]")[0]+";";
+		}
+		return ssel.substring(0, ssel.length()-1);
 	}
 
 	@Override
@@ -58,8 +64,8 @@ public class CompanyList extends AbstractDataInput implements DockingComponent {
 		boxList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				model = boxList.getCheckBoxListModel();
-				action.setEnabled(!model.getCheckedValues().isEmpty());
+				List list = model.getCheckedValues();
+				action.setEnabled(!list.isEmpty());
 			}
 		});
 

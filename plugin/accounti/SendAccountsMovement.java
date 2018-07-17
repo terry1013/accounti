@@ -38,7 +38,7 @@ public class SendAccountsMovement extends TAbstractAction implements PropertyCha
 	public void actionPerformed2() {
 		Hashtable ht = dataInput.getFields();
 		// selected companys
-		ht.put("Companys", list.getSelected());
+		ht.put("companySelected", list.getSelected());
 		SendAccountsMovementTask et = new SendAccountsMovementTask(ht);
 		TTaskManager.submitRunnable(et, null);
 		//et.run();

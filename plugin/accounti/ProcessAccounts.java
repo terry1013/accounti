@@ -36,7 +36,7 @@ public class ProcessAccounts extends TAbstractAction implements PropertyChangeLi
 	@Override
 	public void actionPerformed2() {
 		Hashtable ht = dataInput.getFields();
-		ht.put("Payrolls", list.getSelected());
+		ht.put("payrollSelected", list.getSelected());
 		// ProcessAccountsTask et = new ProcessAccountsTask(ht);
 		// TTaskManager.submitRunnable(et, null);
 		// et.run();

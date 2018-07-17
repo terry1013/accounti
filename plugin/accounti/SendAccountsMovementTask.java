@@ -28,8 +28,6 @@ public class SendAccountsMovementTask implements TRunnable {
 	private TProgressMonitor monitor;
 	private SimpleDateFormat simpleDF = new SimpleDateFormat("yyyyMMdd");
 	
-	public static Vector<String> selectedElements = new Vector<String>();
-
 	public SendAccountsMovementTask(Hashtable ht) {
 		this.exportParameters = ht;
 	}
@@ -76,42 +74,44 @@ public class SendAccountsMovementTask implements TRunnable {
 	}
 
 	private String getWhereClause() {
-		String wc = "";
+		String wc = "(";
+		// Selected companies
+		String scmp[] = ((String) exportParameters.get("companySelected")).split(";");
+		for (String cid : scmp) {
+			wc+= "CODCIA = '"+cid+"' OR ";
+		}
+		wc = wc.substring(0, wc.length()-4)+")";
 		// year
 		int anoctb = (Integer) exportParameters.get("sac.year");
 		if (anoctb > 0) {
-			wc += (wc.equals("")) ? "ANOCTB = " + anoctb : "AND ANOCTB = " + anoctb;
+			wc += " AND ANOCTB = " + anoctb;
 		}
 		// month
 		int lapctb = (Integer) exportParameters.get("sac.month");
 		if (lapctb > 0) {
-			wc += (wc.equals("")) ? "LAPCTB = " + lapctb : "AND LAPCTB = " + lapctb;
+			wc += " AND LAPCTB = " + lapctb;
 		}
 		// type
 		String tipcmp = (String) exportParameters.get("sac.type");
 		if (!tipcmp.equals("")) {
-			wc += (wc.equals("")) ? "TIPCMP = '" + tipcmp + "'" : "AND TIPCMP = '" + tipcmp + "'";
+			wc += " AND TIPCMP = '" + tipcmp + "'";
 		}
 		// vauche #
 		String numcmp = (String) exportParameters.get("sac.number");
 		if (!numcmp.equals("")) {
-			wc += (wc.equals("")) ? "NUMCMP = '" + numcmp + "'" : "AND NUMCMP = '" + numcmp + "'";
+			wc += " AND NUMCMP = '" + numcmp + "'";
 		}
 		// date
 		Date feccmp = (Date) exportParameters.get("sac.date");
 		if (!feccmp.equals(TStringUtils.ZERODATE)) {
-			wc += (wc.equals("")) ? "FECCMP = '" + feccmp + "'" : "AND FECCMP = '" + feccmp + "'";
+			wc += " AND FECCMP = '" + feccmp + "'";
 		}
 		// user
 		String userid = (String) exportParameters.get("sac.user");
 		if (!userid.equals("")) {
-			wc += (wc.equals("")) ? "USERID = '" + userid + "'" : "AND USERID = '" + userid + "'";
+			wc += " AND USERID = '" + userid + "'";
 		}
 
-		// all records from file (if none element in vouche selection are present)
-		if (wc.equals("")) {
-			wc = null;
-		}
 		return wc;
 	}
 
