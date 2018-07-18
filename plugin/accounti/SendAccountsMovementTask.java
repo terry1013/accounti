@@ -27,6 +27,7 @@ public class SendAccountsMovementTask implements TRunnable {
 	private ServiceRequest request;
 	private TProgressMonitor monitor;
 	private SimpleDateFormat simpleDF = new SimpleDateFormat("yyyyMMdd");
+	private DecimalFormat decimalF = new DecimalFormat("#0.00;-#0.00");
 	
 	public SendAccountsMovementTask(Hashtable ht) {
 		this.exportParameters = ht;
@@ -34,12 +35,12 @@ public class SendAccountsMovementTask implements TRunnable {
 
 	private Record translateRecord(Record srcRcd, int id) {
 		Record tr = new Record(sifiRcdModel);
-		if (srcRcd.getFieldValue("canctb").equals(0)) {
-			System.out.println();
-		}
 		for (int c = 0; c < srcRcd.getFieldCount(); c++) {
-			// rest of fields
-			tr.setFieldValue(c + 2, srcRcd.getFieldValue(c));
+			Object obj = srcRcd.getFieldValue(c);
+			if (obj instanceof Double) {
+				obj = decimalF.format(obj);
+			}
+			tr.setFieldValue(c + 2, obj);
 		}
 		// madatory
 		tr.setFieldValue(0, "400");
