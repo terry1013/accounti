@@ -62,7 +62,7 @@ public class PayrollList extends AbstractDataInput implements DockingComponent {
 		String ssel = "";
 		for (Object obj : selectedElements) {
 			String c_p = obj.toString();
-			ssel += c_p.substring(0, 2) + "  " + c_p.substring(4, 6) + "  ";
+			ssel += c_p.substring(0, 2) + "  " + c_p.substring(2, 4) + "  ";
 		}
 		// return ssel.substring(0, ssel.length()-2);
 		return ssel.substring(0, ssel.length());

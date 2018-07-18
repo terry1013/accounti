@@ -48,11 +48,11 @@ public class SendAccountsMovementTask implements TRunnable {
 		
 		// dates to string
 		Date tmp = (Date) srcRcd.getFieldValue("FECCMP");
-		tr.setFieldValue("FECCMP", tmp.equals(TStringUtils.ZERODATE) ? "" : simpleDF.format( tmp));
+		tr.setFieldValue("FECCMP", tmp.equals(TStringUtils.ZERODATE) ? null : simpleDF.format( tmp));
 		tmp = (Date) srcRcd.getFieldValue("FECDOC");
-        tr.setFieldValue("FECDOC", tmp.equals(TStringUtils.ZERODATE) ? "" : simpleDF.format( tmp));
+        tr.setFieldValue("FECDOC", tmp.equals(TStringUtils.ZERODATE) ? null : simpleDF.format( tmp));
 		tmp = (Date) srcRcd.getFieldValue("FECSIS");
-        tr.setFieldValue("FECSIS", tmp.equals(TStringUtils.ZERODATE) ? "" : simpleDF.format( tmp));
+        tr.setFieldValue("FECSIS", tmp.equals(TStringUtils.ZERODATE) ? null : simpleDF.format( tmp));
 		tr.setFieldValue("FECPROC", "");
 		return tr;
 	}
