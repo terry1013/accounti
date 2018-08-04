@@ -19,6 +19,8 @@ import java.util.*;
 
 import javax.swing.*;
 
+import net.infonode.docking.*;
+
 import com.alee.extended.list.*;
 
 import core.*;
@@ -44,9 +46,9 @@ public class CompanyList extends AbstractDataInput implements DockingComponent {
 		String ssel = "";
 		List list = model.getCheckedValues();
 		for (Object obj : list) {
-			ssel += obj.toString().split("[:]")[0]+";";
+			ssel += obj.toString().split("[:]")[0] + ";";
 		}
-		return ssel.substring(0, ssel.length()-1);
+		return ssel.substring(0, ssel.length() - 1);
 	}
 
 	@Override
@@ -74,8 +76,10 @@ public class CompanyList extends AbstractDataInput implements DockingComponent {
 				firePropertyChange("companySelected", null, model.get(boxList.getSelectedIndex()));
 			}
 		});
-		addPropertyChangeListener("companySelected",
-				(PropertyChangeListener) DockingContainer.getView(PayrollList.class.getName()).getComponent());
+		View v = DockingContainer.getView(PayrollList.class.getName());
+		if (v != null) {
+			addPropertyChangeListener("companySelected", (PropertyChangeListener) v.getComponent());
+		}
 	}
 
 	@Override

@@ -1,11 +1,7 @@
-2018-07-18 10:20:17 Looking for parameters in externa file.
-2018-07-18 10:20:17 Connecting to database SleOracle (SLEPLANC) with *autoconnection=
-2018-07-18 10:20:17 Looking for parameters in externa file.
-2018-07-18 10:20:17 Connecting to database TargetDB () with *autoconnection=
-2018-07-18 10:20:18 Plugin AccountIP found
-2018-07-18 10:20:18 Plugin AccountIP.startPlugin() sucsefully
-2018-07-18 10:20:24 Looking for parameters in externa file.
-2018-07-18 10:20:33 No key field found for database table NMM027
-2018-07-18 10:20:33 Database table NMM027 keys fields alter by DBAccess.
-2018-07-18 10:20:34 No key field found for database table ZIFI_REGCONT
-2018-07-18 10:20:34 Database table ZIFI_REGCONT keys fields alter by DBAccess.
+2018-08-04 11:50:41 Looking for parameters in externa file.
+2018-08-04 11:50:41 Connecting to database SleOracle (SLEPLANC) with *autoconnection=
+2018-08-04 11:50:42 Looking for parameters in externa file.
+2018-08-04 11:50:42 Connecting to database TargetDB () with *autoconnection=
+2018-08-04 11:50:42 Plugin AccountIP found
+2018-08-04 11:50:42 Plugin AccountIP.startPlugin() sucsefully
+2018-08-04 11:50:48 Looking for parameters in externa file.

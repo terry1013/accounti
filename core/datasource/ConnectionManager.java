@@ -70,6 +70,7 @@ public class ConnectionManager {
 		Properties prps = new Properties();
 		TStringUtils.parseProperties((String) cf.getFieldValue("t_cnextended_prp"), prps);
 		prps.put("filterTable", (String) cf.getFieldValue("t_cntable_filter"));
+		prps.put("connectionName", (String) cf.getFieldValue("t_cnname"));
 		configureConn(con, prps);
 	}
 
@@ -276,7 +277,7 @@ public class ConnectionManager {
 		try {
 			// Statement sta = ((Connection) dbTableConnection.get("T_LOCAL_PROPERTIES")).createStatement();
 			Statement sta = getDBConnection("").createStatement();
-//			sta.executeUpdate("SHUTDOWN");
+			sta.executeUpdate("SHUTDOWN");
 			systemDBC.close();
 			systemDBC = null;
 			dbMetaData.clear();

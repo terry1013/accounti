@@ -27,7 +27,7 @@ public class AccountIP extends PluginAdapter {
 	public Object executePlugin(Object obj) {
 		Vector<TAbstractAction> actl = new Vector<TAbstractAction>();
 		actl.add(new AccountTransfer());
-		actl.add(new AccountingProcess());
+//		actl.add(new AccountingProcess());
 		
 		return actl;
 	}
